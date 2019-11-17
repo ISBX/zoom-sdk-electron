@@ -92,6 +92,9 @@ public:
 	//meeting_video_Controller_cb
 	v8::Persistent<v8::Function, v8::CopyablePersistentTraits<v8::Function> > onSharingStatus;
 
+	//meeting_remote_Controller_cb
+	v8::Persistent<v8::Function, v8::CopyablePersistentTraits<v8::Function> > onRemoteControlStatus;
+
 	//meeting_participants_Controller_cb
 	v8::Persistent<v8::Function, v8::CopyablePersistentTraits<v8::Function> > onUserJoin;
 	v8::Persistent<v8::Function, v8::CopyablePersistentTraits<v8::Function> > onUserLeft;

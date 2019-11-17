@@ -6,6 +6,7 @@
 #include "zoom_node_meeting_video_ctrl.h"
 #include "zoom_node_meeting_participants_ctrl.h"
 #include "zoom_node_meeting_share_ctrl.h"
+#include "zoom_node_meeting_remote_ctrl.h"
 #include "zoom_node_meeting_h323_ctrl.h"
 #include "zoom_node_meeting_config_ctrl.h"
 #include "zoom_node_setting_video_ctrl.h"
@@ -42,6 +43,7 @@ void InitAll(v8::Local<v8::Object> exports, v8::Local<v8::Object> module) {
 	ZoomNodeMeetingVideoCtrlWrap::Init(exports->GetIsolate());
 	ZoomNodeMeetingParticipantsCtrlWrap::Init(exports->GetIsolate());
 	ZoomNodeMeetingShareCtrlWrap::Init(exports->GetIsolate());
+	ZoomNodeMeetingRemoteCtrlWrap::Init(exports->GetIsolate());
 	ZoomNodeMeetingH323CtrlWrap::Init(exports->GetIsolate());
 	ZoomNodeMeetingConfigCtrlWrap::Init(exports->GetIsolate());
 	ZoomNodeSettingVideoCtrlWrap::Init(exports->GetIsolate());
@@ -73,6 +75,7 @@ v8::Persistent<v8::Function> ZoomNodeMeetingAudioCtrlWrap::constructor;
 v8::Persistent<v8::Function> ZoomNodeMeetingVideoCtrlWrap::constructor;
 v8::Persistent<v8::Function> ZoomNodeMeetingParticipantsCtrlWrap::constructor;
 v8::Persistent<v8::Function> ZoomNodeMeetingShareCtrlWrap::constructor;
+v8::Persistent<v8::Function> ZoomNodeMeetingRemoteCtrlWrap::constructor;
 v8::Persistent<v8::Function> ZoomNodeMeetingH323CtrlWrap::constructor;
 v8::Persistent<v8::Function> ZoomNodeMeetingConfigCtrlWrap::constructor;
 v8::Persistent<v8::Function> ZoomNodeSettingVideoCtrlWrap::constructor;
@@ -715,6 +718,10 @@ void ZoomNodeMeetingWrap::GetMeetingParticipantsCtrl(const v8::FunctionCallbackI
 void ZoomNodeMeetingWrap::GetMeetingShareCtrl(const v8::FunctionCallbackInfo<v8::Value>& args)
 {
 	ZoomNodeMeetingShareCtrlWrap::NewInstance(args);
+}
+void ZoomNodeMeetingWrap::GetMeetingRemoteCtrl(const v8::FunctionCallbackInfo<v8::Value>& args)
+{
+	ZoomNodeMeetingRemoteCtrlWrap::NewInstance(args);
 }
 void ZoomNodeMeetingWrap::GetMeetingH323Ctrl(const v8::FunctionCallbackInfo<v8::Value>& args)
 {

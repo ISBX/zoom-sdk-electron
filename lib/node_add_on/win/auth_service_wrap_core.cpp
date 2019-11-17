@@ -20,6 +20,7 @@ public:
 				ZOOM_SDK_NAMESPACE::CSDKWrap::GetInst().GetMeetingServiceWrap().T_GetH323Helper().Init_Wrap(&g_meeting_service_wrap);
 				ZOOM_SDK_NAMESPACE::CSDKWrap::GetInst().GetMeetingServiceWrap().T_GetMeetingParticipantsController().Init_Wrap(&g_meeting_service_wrap);
 				ZOOM_SDK_NAMESPACE::CSDKWrap::GetInst().GetMeetingServiceWrap().T_GetMeetingShareController().Init_Wrap(&g_meeting_service_wrap);
+				ZOOM_SDK_NAMESPACE::CSDKWrap::GetInst().GetMeetingServiceWrap().T_GetMeetingRemoteController().Init_Wrap(&g_meeting_service_wrap);
 				ZOOM_SDK_NAMESPACE::CSDKWrap::GetInst().GetMeetingServiceWrap().T_GetMeetingVideoController().Init_Wrap(&g_meeting_service_wrap);
 				ZOOM_SDK_NAMESPACE::CSDKWrap::GetInst().GetMeetingServiceWrap().T_GetUIController().Init_Wrap(&g_meeting_service_wrap);
 				ZOOM_SDK_NAMESPACE::CSDKWrap::GetInst().GetMeetingServiceWrap().T_GetMeetingRealNameAuthController().Init_Wrap(&g_meeting_service_wrap);

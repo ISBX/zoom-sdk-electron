@@ -407,6 +407,18 @@ enum ZNShareStatus
 	ZN_Sharing_OtherStartAudioShare,///<Other user begins to share the sounds of computer audio.
 	ZN_Sharing_OtherStopAudioShare,///<Other user stops to share the sounds of computer audio.
 };
+enum ZNRemoteControlStatus
+{
+	ZN_Remote_Control_None,///<For initialization.
+	ZN_Remote_Control_I_Can_Request_Control_Who,///<Remote control information. I can enable the remote control.	
+	ZN_Remote_Control_I_Can_Control_Who_Begin,///<The authority of remote control. I get control when remote control begins.
+	ZN_Remote_Control_I_Can_Control_Who_End,///<The authority of remote control. I lose control when remote control ends. 
+	ZN_Remote_Control_I_Control_Who_Begin,///<The status of remote control. I am in the status of remote control.
+	ZN_Remote_Control_I_Control_Who_End,///<The status of remote control. I am out of the remote control.
+	ZN_Remote_Control_Who_Control_Me,///<The status of remote control. I am controlled by whom. 
+	ZN_Remote_Control_I_Recv_Decline_Msg,///<Remote control information. I have received a refused information of remote control.
+	ZN_Remote_Control_I_Recv_Request_Msg,///<Remote control information. I have received an information of request for remote control.
+};
 typedef struct _ZNCameraInfo
 {
 	ZoomSTRING deviceId; ///<The camera device ID.

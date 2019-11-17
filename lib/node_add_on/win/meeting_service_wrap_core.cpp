@@ -198,6 +198,10 @@ ZMeetingShareWrap& ZMeetingServiceWrap::GetMeetingShareCtrl()
 {
 	return m_meeting_share_ctrl;
 }
+ZMeetingRemoteWrap& ZMeetingServiceWrap::GetMeetingRemoteCtrl()
+{
+	return m_meeting_remote_ctrl;
+}
 ZMeetingH323Wrap& ZMeetingServiceWrap::GetMeetingH323Ctrl()
 {
 	return m_meeting_h323_ctrl;

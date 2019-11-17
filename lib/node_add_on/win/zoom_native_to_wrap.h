@@ -18,6 +18,7 @@ ZNFreeMeetingNeedUpgradeType Map2WrapDefine(ZOOM_SDK_NAMESPACE::IMeetingConfigur
 ZNPremeetingAPIResult Map2WrapDefine(ZOOM_SDK_NAMESPACE::PremeetingAPIResult result);
 ZNDirectShareStatus Map2WrapDefine(ZOOM_SDK_NAMESPACE::DirectShareStatus status);
 ZNShareStatus Map2WrapDefine(ZOOM_SDK_NAMESPACE::SharingStatus status);
+ZNRemoteControlStatus Map2WrapDefine(ZOOM_SDK_NAMESPACE::RemoteControlStatus status);
 ZNAudioType Map2WrapDefine(ZOOM_SDK_NAMESPACE::AudioType type);
 ZNUserRole Map2WrapDefine(ZOOM_SDK_NAMESPACE::UserRole role);
 ZNSMSVerificationCodeErr Map2WrapDefine(SMSVerificationCodeErr err);

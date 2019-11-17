@@ -1168,6 +1168,41 @@ let functionObj = {
     let ret = zoomshare.MeetingShare_StartAppShare(opts);
     console.log('StartAppShare', ret);
   },
+  requestRemoteControl: function(userId) {
+    console.log('requestRemoteControl')
+    let ret = zoomshare.MeetingShare_RequestRemoteControl(userId);
+    console.log('requestRemoteControl called with return value', ret);
+  },
+  giveRemoteControlTo: function(userId) {
+    console.log('GiveRemoteControlTo')
+    let ret = zoomshare.MeetingShare_GiveRemoteControlTo(userId);
+    console.log('GiveRemoteControlTo called with return value', ret);
+  },  
+  canRequestControl: function(userId) {
+    console.log('canRequestControl')
+    let ret = zoomshare.MeetingShare_CanRequestControl(userId);
+    console.log('canRequestControl called with return value', ret);
+  },  
+  isHaveRemoteControlRight: function(userId) {
+    console.log('IsHaveRemoteControlRight')
+    let ret = zoomshare.MeetingShare_IsHaveRemoteControlRight(userId);
+    console.log('IsHaveRemoteControlRight called with return value', ret);
+  },  
+  isInRemoteControllingStatus: function(userId) {
+    console.log('GiveRemoteControlTo')
+    let ret = zoomshare.MeetingShare_IsInRemoteControllingStatus(userId);
+    console.log('IsInRemoteControllingStatus called with return value', ret);
+  },  
+  enterRemoteControllingStatus: function(userId) {
+    console.log('EnterRemoteControllingStatus')
+    let ret = zoomshare.MeetingShare_EnterRemoteControllingStatus(userId);
+    console.log('EnterRemoteControllingStatus called with return value', ret);
+  },  
+  revokeRemoteControl: function() {
+    console.log('RevokeRemoteControl')
+    let ret = zoomshare.MeetingShare_RevokeRemoteControl();
+    console.log('RevokeRemoteControl called with return value', ret);
+  },  
   startMonitorShare: function(zn_monitorID) {
     let opts = {
       zn_monitorID: zn_monitorID

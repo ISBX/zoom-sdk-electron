@@ -391,6 +391,35 @@ public:
 	}
 };
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+class ZNativeSDKMeetingRemoteWrapSink
+{
+public:
+	/// \brief Callback event of the changed remote control status. 
+	/// \param status The values of remote control status. For more details, see \link ZNRemoteControlStatus \endlink enum.
+	/// \param userId Sharer ID. 
+	virtual void onRemoteControlStatus(ZNRemoteControlStatus status, unsigned int userId)
+	{
+		if (ZoomNodeSinkHelper::GetInst().onRemoteControlStatus.IsEmpty())
+			return;
+
+		auto isolate = v8::Isolate::GetCurrent();
+		v8::HandleScope scope(isolate);
+		auto context = isolate->GetCurrentContext();
+		auto global = context->Global();
+
+
+		v8::Local<v8::Object> node = v8::Object::New(isolate);
+		node->Set(v8::String::NewFromUtf8(isolate, "userId"), v8::Integer::New(isolate, (int32_t)userId));
+		node->Set(v8::String::NewFromUtf8(isolate, "RemoteControlStatus"), v8::Integer::New(isolate, (int32_t)status));
+
+		int argc = 1;
+		v8::Local<v8::Value> argv[1] = { node };
+		auto fn = v8::Local<v8::Function>::New(isolate, ZoomNodeSinkHelper::GetInst().onRemoteControlStatus);
+
+		fn->Call(context, global, argc, argv);
+	}
+};
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 class ZNativeSDKMeetingParticipantsWrapSink
 {
 public:
@@ -708,6 +737,9 @@ public:
 
 	//meeting_share_ctrl_cb
 	ZNativeSDKMeetingShareWrapSink m_meetingShareWrapSink;
+
+	//meeting_remote_ctrl_cb
+	ZNativeSDKMeetingRemoteWrapSink m_meetingRemoteControlWrapSink;
 
 	//meeting_participants_ctrl_cb
 	ZNativeSDKMeetingParticipantsWrapSink m_meetingParticipantsWrapSink;

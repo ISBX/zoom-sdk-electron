@@ -510,6 +510,43 @@ ZNShareStatus Map2WrapDefine(ZOOM_SDK_NAMESPACE::SharingStatus status)
 	}
 	return zn_sharing_status;
 }
+ZNRemoteControlStatus Map2WrapDefine(ZOOM_SDK_NAMESPACE::RemoteControlStatus status)
+{
+	ZNRemoteControlStatus zn_remote_control_status;
+	switch (status)
+	{
+	case ZOOMSDK::Remote_Control_None:
+		zn_remote_control_status = ZN_Remote_Control_None;
+		break;
+	case ZOOMSDK::Remote_Control_I_Can_Request_Control_Who:
+		zn_remote_control_status = ZN_Remote_Control_I_Can_Request_Control_Who;
+		break;
+	case ZOOMSDK::Remote_Control_I_Can_Control_Who_Begin:
+		zn_remote_control_status = ZN_Remote_Control_I_Can_Control_Who_Begin;
+		break;
+	case ZOOMSDK::Remote_Control_I_Can_Control_Who_End:
+		zn_remote_control_status = ZN_Remote_Control_I_Can_Control_Who_End;
+		break;
+	case ZOOMSDK::Remote_Control_I_Control_Who_Begin:
+		zn_remote_control_status = ZN_Remote_Control_I_Control_Who_Begin;
+		break;
+	case ZOOMSDK::Remote_Control_I_Control_Who_End:
+		zn_remote_control_status = ZN_Remote_Control_I_Control_Who_End;
+		break;
+	case ZOOMSDK::Remote_Control_Who_Control_Me:
+		zn_remote_control_status = ZN_Remote_Control_Who_Control_Me;
+		break;
+	case ZOOMSDK::Remote_Control_I_Recv_Decline_Msg:
+		zn_remote_control_status = ZN_Remote_Control_I_Recv_Decline_Msg;
+		break;
+	case ZOOMSDK::Remote_Control_I_Recv_Request_Msg:
+		zn_remote_control_status = ZN_Remote_Control_I_Recv_Request_Msg;
+		break;
+	default:
+		break;
+	}
+	return zn_remote_control_status;
+}
 ZNAudioType Map2WrapDefine(ZOOM_SDK_NAMESPACE::AudioType type)
 {
 	ZNAudioType zn_audio_type;

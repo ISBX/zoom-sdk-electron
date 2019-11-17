@@ -5,6 +5,7 @@
 #include "meeting_video_wrap_core.h"
 #include "meeting_participants_wrap_core.h"
 #include "meeting_share_wrap_core.h"
+#include "meeting_remote_wrap_core.h"
 #include "meeting_h323_wrap_core.h"
 #include "meeting_config_wrap_core.h"
 #include "zoom_sdk_sms_helper_wrap_core.h"
@@ -95,6 +96,7 @@ public:
 	ZMeetingVideoWrap& GetMeetingVideoCtrl();
     ZMeetingParticipantsWrap& GetMeetingParticipantsCtrl();
 	ZMeetingShareWrap& GetMeetingShareCtrl();
+	ZMeetingRemoteWrap& GetMeetingRemoteCtrl();
 	ZMeetingH323Wrap& GetMeetingH323Ctrl();
 	ZMeetingConfigWrap& GetMeetingConfigCtrl();
 	ZSDKSMSHelperWrap& GetSDKSMSHelper();
@@ -114,6 +116,7 @@ private:
 	ZMeetingVideoWrap m_meeting_video_ctrl;
 	ZMeetingParticipantsWrap m_meeting_participants_ctrl;
 	ZMeetingShareWrap m_meeting_share_ctrl;
+	ZMeetingRemoteWrap m_meeting_remote_ctrl;
 	ZMeetingH323Wrap m_meeting_h323_ctrl;
 	ZMeetingConfigWrap m_meeting_config_ctrl;
 	ZSDKSMSHelperWrap m_sdk_sms_helper;

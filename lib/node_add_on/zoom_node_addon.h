@@ -267,6 +267,8 @@ public:
 	static void GetMeetingParticipantsCtrl(const v8::FunctionCallbackInfo<v8::Value>& args);
 	/// \brief Get Zoom SDK Meeting Share Controller Module.
 	static void GetMeetingShareCtrl(const v8::FunctionCallbackInfo<v8::Value>& args);
+	/// \brief Get Zoom SDK Meeting Remote Controller Module.
+	static void GetMeetingRemoteCtrl(const v8::FunctionCallbackInfo<v8::Value>& args);
 	/// \brief Get Zoom SDK Meeting H323 Controller Module.
 	static void GetMeetingH323Ctrl(const v8::FunctionCallbackInfo<v8::Value>& args);
 	/// \brief Get Zoom SDK Meeting Configuration Controller Module.
@@ -312,6 +314,7 @@ static void InitClassAttribute<ZoomNodeMeetingWrap >(const v8::Local<v8::Functio
 	NODE_SET_PROTOTYPE_METHOD(tpl, "GetMeetingVideoCtrl", ZoomNodeMeetingWrap::GetMeetingVideoCtrl);
 	NODE_SET_PROTOTYPE_METHOD(tpl, "GetMeetingParticipantsCtrl", ZoomNodeMeetingWrap::GetMeetingParticipantsCtrl);
 	NODE_SET_PROTOTYPE_METHOD(tpl, "GetMeetingShareCtrl", ZoomNodeMeetingWrap::GetMeetingShareCtrl);
+	NODE_SET_PROTOTYPE_METHOD(tpl, "GetMeetingRemoteCtrl", ZoomNodeMeetingWrap::GetMeetingRemoteCtrl);
 	NODE_SET_PROTOTYPE_METHOD(tpl, "GetMeetingH323Ctrl", ZoomNodeMeetingWrap::GetMeetingH323Ctrl);
 	NODE_SET_PROTOTYPE_METHOD(tpl, "GetMeetingConfigCtrl", ZoomNodeMeetingWrap::GetMeetingConfigCtrl);
 
@@ -486,7 +489,10 @@ public:
 	///Otherwise failed. To get extended error information, see \link ZNSDKError \endlink enum.
 	/// \remarks The function does not work if the window shows the first or last page. The return value is ZNSDKERR_SUCCESS in this case.
 	static void ShowPreOrNextPageVideo(const v8::FunctionCallbackInfo<v8::Value>& args);
-	/// \brief Set the visibility of the green frame when sharing the application.	/// \param 1. bShow(bool) TRUE indicates to display the frame. FALSE hide.	/// \return If the function succeeds, the return value is ZNSDKERR_SUCCESS.	///Otherwise failed. To get extended error information, see \link ZNSDKError \endlink enum.
+	/// \brief Set the visibility of the green frame when sharing the application.
+	/// \param 1. bShow(bool) TRUE indicates to display the frame. FALSE hide.
+	/// \return If the function succeeds, the return value is ZNSDKERR_SUCCESS.
+	///Otherwise failed. To get extended error information, see \link ZNSDKError \endlink enum.
 	static void ShowSharingFrameWindows(const v8::FunctionCallbackInfo<v8::Value>& args);
 	/// \brief Get the information whether the current view supports split screen mode or not. If supports, check it if it is already in the split screen mode.
 	/// \param 1. bZNSupportSplitScreen(bool) False can be used to initialize.
