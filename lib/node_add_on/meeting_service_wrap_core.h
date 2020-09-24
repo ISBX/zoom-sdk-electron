@@ -59,7 +59,8 @@ public:
 	ZNSDKError SwitchSplitScreenMode(bool bSplit);
 
 	ZNSDKError BackToMeeting();
-	ZNSDKError GetMeetingUIWnd(ZoomSTRING& hFirstView, ZoomSTRING& hSecondView);
+	ZNSDKError GetMeetingUIWnd(ZoomSTRING& hFirstView, ZoomSTRING& hSecondView, RECT& desktopRect, RECT& firstRect, RECT& secondRect);
+	ZNSDKError MoveUIWnd(int left, int top, int width, int height);
 	ZNSDKError SwitchMinimizeUIMode4FristScreenMeetingUIWnd(ZNSDKMinimizeUIMode mode);
 	bool  IsMinimizeModeOfFristScreenMeetingUIWnd(ZNSDKMinimizeUIMode& mode);
 	ZNSDKError SwapToShowShareViewOrVideo(bool bToDisplayShare);

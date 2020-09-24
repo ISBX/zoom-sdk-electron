@@ -4,6 +4,8 @@
 #include "wrap/meeting_service_components_wrap/meeting_ui_ctrl_wrap.h"
 #include "zoom_native_to_wrap.h"
 #include "sdk_events_wrap_class.h"
+#include <windows.h>
+// #include <iostream>
 
 ZOOM_SDK_NAMESPACE::IMeetingServiceWrap& g_meeting_service_wrap = ZOOM_SDK_NAMESPACE::CSDKWrap::GetInst().GetMeetingServiceWrap();
 
@@ -475,7 +477,7 @@ ZNSDKError ZMeetingUICtrlWrap::BackToMeeting()
 	ZNSDKError err = Map2WrapDefine(ZOOM_SDK_NAMESPACE::CSDKWrap::GetInst().GetMeetingServiceWrap().T_GetUIController().BackToMeeting());
 	return err;
 }
-ZNSDKError ZMeetingUICtrlWrap::GetMeetingUIWnd(ZoomSTRING& hFirstView, ZoomSTRING& hSecondView)
+ZNSDKError ZMeetingUICtrlWrap::GetMeetingUIWnd(ZoomSTRING& hFirstView, ZoomSTRING& hSecondView, RECT& desktopRect, RECT& firstRect, RECT& secondRect)
 {
 	HWND sdk_hFirstView;
 	HWND sdk_hSecondView;
@@ -487,6 +489,27 @@ ZNSDKError ZMeetingUICtrlWrap::GetMeetingUIWnd(ZoomSTRING& hFirstView, ZoomSTRIN
 	_i64tow((long long)sdk_hSecondView, temp_2, radix);
 	hFirstView = temp_1;
 	hSecondView = temp_2;
+
+   
+    const HWND hDesktop = GetDesktopWindow();
+	GetWindowRect(hDesktop, &desktopRect);
+
+	GetWindowRect(sdk_hFirstView, &firstRect);
+	GetWindowRect(sdk_hFirstView, &secondRect);
+	// MoveWindow(sdk_hFirstView, 0, 0, 640, 480, true);
+
+	return err;
+}
+ZNSDKError ZMeetingUICtrlWrap::MoveUIWnd(int left, int top, int width, int height)
+{
+	HWND sdk_hFirstView;
+	HWND sdk_hSecondView;
+	ZNSDKError err = Map2WrapDefine(ZOOM_SDK_NAMESPACE::CSDKWrap::GetInst().GetMeetingServiceWrap().T_GetUIController().GetMeetingUIWnd(sdk_hFirstView, sdk_hSecondView));
+	// SetProcessDPIAware();
+	// int dpi = GetDpiForWindow(sdk_hFirstView);
+	// cout << "DPI: " << dpi << endl;
+	MoveWindow(sdk_hFirstView, left, top, width, height, true);
+
 	return err;
 }
 ZNSDKError ZMeetingUICtrlWrap::SwitchMinimizeUIMode4FristScreenMeetingUIWnd(ZNSDKMinimizeUIMode mode)

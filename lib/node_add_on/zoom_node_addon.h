@@ -522,6 +522,7 @@ public:
 	/// \return If the function succeeds, the return value is a object which includes "err" ZNSDKError, "hFirstView" the window handle(hex) of the meeting user interface displayed by the first view,
 	///and "hSecondView" the window handle(hex) of the meeting user interface displayed by the second view. To get extended error information, see \link ZNSDKError \endlink enum.
 	static void GetMeetingUIWnd(const v8::FunctionCallbackInfo<v8::Value>& args);
+	static void MoveUIWnd(const v8::FunctionCallbackInfo<v8::Value>& args);
 	/// \brief Change the display mode of the minimized meeting window for the first view.
 	/// \param 1.mode(number) Specifies the minimized mode. For more details, see \link ZNSDKMinimizeUIMode \endlink enum.
 	/// \return If the function succeeds, the return value is ZNSDKERR_SUCCESS.
@@ -589,6 +590,7 @@ static void InitClassAttribute<ZoomNodeMeetingUICtrlWrap >(const v8::Local<v8::F
 
 	NODE_SET_PROTOTYPE_METHOD(tpl, "BackToMeeting", ZoomNodeMeetingUICtrlWrap::BackToMeeting);
 	NODE_SET_PROTOTYPE_METHOD(tpl, "GetMeetingUIWnd", ZoomNodeMeetingUICtrlWrap::GetMeetingUIWnd);
+	NODE_SET_PROTOTYPE_METHOD(tpl, "MoveUIWnd", ZoomNodeMeetingUICtrlWrap::MoveUIWnd);
 	NODE_SET_PROTOTYPE_METHOD(tpl, "SwitchMinimizeUIMode4FristScreenMeetingUIWnd", ZoomNodeMeetingUICtrlWrap::SwitchMinimizeUIMode4FristScreenMeetingUIWnd);
 	NODE_SET_PROTOTYPE_METHOD(tpl, "IsMinimizeModeOfFristScreenMeetingUIWnd", ZoomNodeMeetingUICtrlWrap::IsMinimizeModeOfFristScreenMeetingUIWnd);
 	NODE_SET_PROTOTYPE_METHOD(tpl, "SwapToShowShareViewOrVideo", ZoomNodeMeetingUICtrlWrap::SwapToShowShareViewOrVideo);

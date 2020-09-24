@@ -55,7 +55,7 @@
 		<!-- <button type="button" class="button-small" onclick="switchToVideoWall()">Switch To VideoWall</button> -->
 		<!-- <button type="button" class="button-small" onclick="swtichToAcitveSpeaker()">Swtich To AcitveSpeaker</button> -->
 		<!-- <button type="button" class="button-small" onclick="moveFloatVideoWnd()">Move Float VideoWnd</button> -->
-		<!-- <button type="button" class="button-small" onclick="showSharingToolbar()">Show Sharing Toolbar</button> -->
+		<button type="button" class="button-small" onclick="showSharingToolbar()">Show Sharing Toolbar</button>
 		<!-- <button type="button" class="button-small" onclick="switchFloatVideoToActiveSpkMod()">Switch FloatVideo To ActiveSpkMod</button> -->
 		<!-- <button type="button" class="button-small" onclick="changeFloatoActiveSpkVideoSize()">Change FloatoActiveSpkVideoSizer</button> -->
 		<!-- <button type="button" class="button-small" onclick="switchFloatVideoToGalleryMod()">Switch FloatVideo To GalleryMod</button> -->
@@ -65,7 +65,7 @@
 		<button type="button" class="button-small" onclick="hideJoinAudioDlg()">Hide JoinAudioDlg</button>
 		<button type="button" class="button-small" onclick="getWallViewPageInfo()">Get WallViewPage Info</button>
 		<!-- <button type="button" class="button-small" onclick="showPreOrNextPageVideo()">Show Pre Or Next Page Video</button> -->
-		<!-- <button type="button" class="button-small" onclick="showSharingFrameWindows()">Show Sharing FrameWindows</button> -->
+		<button type="button" class="button-small" onclick="showSharingFrameWindows()">Show Sharing FrameWindows</button>
 		<!-- <button type="button" class="button-small" onclick="switchSplitScreenMode()">Switch Split ScreenMode</button> -->
 		<!-- <button type="button" class="button-small" onclick="getCurrentSplitScreenModeInfo()">Get Current Split ScreenMode Info</button> -->
 		<!-- <div class="section">Annotation</div>
@@ -105,20 +105,23 @@
     <div>
       <input type="text" name="sharehandle" class="input-show" placeholder="input windowID, monitorID" id="sharehandle"/>
     </div>
+		<button type="button" class="button-small" onclick="getUserList()">List Users</button>
+		<button type="button" class="button-small" onclick="listDisplays()">List Displays</button>
 		<button type="button" class="button-small" onclick="startAppShare()">Start AppShare</button>
 		<button type="button" class="button-small" onclick="startMonitorShare()">Start MonitorShare</button>
-    <button type="button" class="button-small" onclick="stopShare()">Stop Share</button>
+		<button type="button" class="button-small" onclick="giveRemoteControlTo()">Give Remote Control</button>
+		<button type="button" class="button-small" onclick="stopShare()">Stop Share</button>
     <!-- <div class="section">Setting Statistic</div>
     <button type="button" class="button-small" onclick="queryOverallStatisticInfo()">Query Overall StatisticInfo</button>
     <button type="button" class="button-small" onclick="queryAudioStatisticInfo()">Query Audio StatisticInfo</button>
     <button type="button" class="button-small" onclick="queryVideoStatisticInfo()">Query Video StatisticInfo</button>
     <button type="button" class="button-small" onclick="queryShareStatisticInfo()">Query Share StatisticInfo</button> -->
-  </div>
+	</div>
 </body>
 </html>
 
 <script>
-  const {ipcRenderer, remote} = require('electron');
+  const {ipcRenderer, remote, screen} = require('electron');
 
   let btnEnd = document.querySelector('#btn-end');
   let btnLock = document.querySelector('#btn-lock');
@@ -143,6 +146,11 @@
     btnLock.classList.add("button-disabled");
     btnUnLock.disabled = 'disabled';
     btnUnLock.classList.add("button-disabled");
+  }
+
+  function getUserList() {
+    const users = zoommeeting.GetParticipantsList();
+    console.log('users', users);
   }
 
   function leave() {
@@ -237,10 +245,10 @@
   // 	ipcRenderer.send('asynchronous-message', 'moveFloatVideoWnd');
   // }
 
-  // function showSharingToolbar () {
-  // 	let show = document.getElementById("show").value;
-  // 	ipcRenderer.send('asynchronous-message', 'showSharingToolbar', Boolean(show));
-  // }
+  function showSharingToolbar () {
+  	let show = document.getElementById("show").value;
+  	ipcRenderer.send('asynchronous-message', 'showSharingToolbar', Boolean(show));
+  }
 
   // function switchFloatVideoToActiveSpkMod () {
   // 	ipcRenderer.send('asynchronous-message', 'switchFloatVideoToActiveSpkMod');
@@ -285,10 +293,10 @@
   // 	ipcRenderer.send('asynchronous-message', 'showPreOrNextPageVideo', Boolean(show));
   // }
 
-  // function showSharingFrameWindows () {
-  // 	let show = document.getElementById("show").value;
-  // 	ipcRenderer.send('asynchronous-message', 'showSharingFrameWindows', Boolean(show));
-  // }
+  function showSharingFrameWindows () {
+  	let show = document.getElementById("show").value;
+  	ipcRenderer.send('asynchronous-message', 'showSharingFrameWindows', Boolean(show));
+  }
 
   // function switchSplitScreenMode () {
   // 	let isSwitch = document.getElementById("show").value;
@@ -417,6 +425,11 @@
     ipcRenderer.send('asynchronous-message', 'hideOrShowNoVideoUserOnVideoWall', Boolean(bHide));
   }
 
+  function listDisplays() {
+    let displays = screen.getAllDisplays();
+    console.log('displays', displays);
+  }
+
   function startAppShare() {
     let zn_hShare_app = document.getElementById("sharehandle").value;
     ipcRenderer.send('asynchronous-message', 'startAppShare', zn_hShare_app);
@@ -424,7 +437,18 @@
   
   function startMonitorShare() {
     let zn_monitorID = document.getElementById("sharehandle").value;
+    console.log('zn_monitorID', zn_monitorID, typeof zn_monitorID);
     ipcRenderer.send('asynchronous-message', 'startMonitorShare', zn_monitorID);
+  }
+
+  function requestRemoteControl() {
+    ipcRenderer.send('asynchronous-message', 'requestRemoteControl');
+  }
+
+  function giveRemoteControlTo() {
+    let userId = document.getElementById("sharehandle").value;
+    userId = parseInt(userId)
+    ipcRenderer.send('asynchronous-message', 'giveRemoteControlTo', userId);
   }
 
   function stopShare() {
