@@ -37,6 +37,7 @@ void ZMeetingParticipantsWrap::SetSink(ZNativeSDKMeetingParticipantsWrapSink *pS
 ZNUserInfomation ZMeetingParticipantsWrap::GetUserInfomationByUserID(unsigned int userid)
 {
     ZNUserInfomation user;
+    user.userInfoType = ZN_FAKE_USERINFO;
     ZoomSDKMeetingService *service = [[ZoomSDK sharedSDK] getMeetingService];
     if (!service) {
         return user;
@@ -54,11 +55,13 @@ ZNUserInfomation ZMeetingParticipantsWrap::GetUserInfomationByUserID(unsigned in
         usName = @"";
     }
     user.userName = usName.UTF8String;
+    /*
     NSString *usEmail = [userInfo getEmail];
     if (!usEmail) {
         usEmail = @"";
     }
     user.email = usEmail.UTF8String;
+     */
     bool ishost = [userInfo isHost];
     user.isHost = ishost;
     unsigned int usID = [userInfo getUserID];
@@ -77,8 +80,10 @@ ZNUserInfomation ZMeetingParticipantsWrap::GetUserInfomationByUserID(unsigned in
     ZoomSDKWebinarAttendeeStatus *webinar = [userInfo GetWebinarAttendeeStatus];
     bool isAttend = webinar.isAttendeeCanTalk;
     user.webinarAttendeeStatus = isAttend;
+    user.userInfoType = ZN_REAL_USERINFO;
     return user;
 }
+
 
 ZNList<unsigned int> ZMeetingParticipantsWrap::GetParticipantsList()
 {

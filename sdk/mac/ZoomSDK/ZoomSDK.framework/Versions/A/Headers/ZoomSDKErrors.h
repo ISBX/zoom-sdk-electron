@@ -15,17 +15,19 @@
 #define kSDKAuthAccountNotSupport       3024
 //Account did not enable SDK feature
 #define kSDKAuthAccountNotEnableSDK     3025
+//Account does not support this SDK version
+#define kSDKAuthAccountDonotSupportTheSDKVersion    3112
 
 /** 
  @brief An enumeration of user types. 
  */
 typedef enum {
-    //API user.
-    ZoomSDKUserType_APIUser     = 99,
     //User logs in with working email.
     ZoomSDKUserType_ZoomUser    = 100,
     //Single-sign-on user.
     ZoomSDKUserType_SSOUser     = 101,
+    //Users who are not logged in
+    ZoomSDKUserType_WithoutLogin = 102,
 }ZoomSDKUserType;
 
 typedef enum {
@@ -70,8 +72,6 @@ typedef enum{
     ActionMeetingCmd_DisableUnmuteBySelf,
     //Mute all participants in the meeting, available only for the host/co-host. 
     ActionMeetingCmd_MuteAll,
-	//Unmute all participants in the meeting, available only for the host/co-host. 
-    ActionMeetingCmd_UnmuteAll,
     //Lock the meeting, available only for the host/co-host. Once locked, the new participants can no longer join the meeting/co-host.
     ActionMeetingCmd_LockMeeting,
 	//Unlock the meeting, available only for the host/co-host. 
@@ -135,6 +135,8 @@ typedef enum {
     MeetingPropertyCmd_HostTag, 
 	//Meeting ID.
     MeetingPropertyCmd_MeetingID,
+    //Meeting password.
+    MeetingPropertyCmd_MeetingPassword
 }MeetingPropertyCmd;
 
 /**
@@ -251,6 +253,8 @@ typedef enum{
     ZoomSDKError_TooFrequentCall,
     //unsupported feature
     ZoomSDKError_UnSupportedFeature,
+    //unsupport email login
+    ZoomSDKError_EmailLoginIsDisabled,
 	//Unknown error.
     ZoomSDKError_UnKnow,
 }ZoomSDKError;
@@ -262,17 +266,19 @@ typedef enum {
     //Authentication is successful
     ZoomSDKAuthError_Success = 0,
     //Key or secret is wrong
-    ZoomSDKAuthError_KeyOrSecretWrong = 1,
+    ZoomSDKAuthError_KeyOrSecretWrong,
     //Client account does not support
-    ZoomSDKAuthError_AccountNotSupport = 2,
+    ZoomSDKAuthError_AccountNotSupport,
     //Client account does not enable SDK
-    ZoomSDKAuthError_AccountNotEnableSDK = 3,
+    ZoomSDKAuthError_AccountNotEnableSDK,
     //Auth timeout
-    ZoomSDKAuthError_Timeout = 4,
+    ZoomSDKAuthError_Timeout,
     //Network issue
-    ZoomSDKAuthError_NetworkIssue = 5,
+    ZoomSDKAuthError_NetworkIssue,
+    //Client incompatible
+    ZoomSDKAuthError_Client_Incompatible,
     //Unknown error
-    ZoomSDKAuthError_Unknown = 6,
+    ZoomSDKAuthError_Unknown,
 }ZoomSDKAuthError;
 
 /**
@@ -344,8 +350,16 @@ typedef enum {
     ZoomSDKMeetingError_RegisterWebinarEnforceLogin     = 23,
     //The certificate of ZC has been changed.
     ZoomSDKMeetingError_ZCCertificateChanged            = 24,
+    //Vanity conference ID does not exist.
+    ZoomSDKMeetingError_vanityNotExist                  = 27,
+    //Join webinar with the same email.
+    ZoomSDKMeetingError_joinWebinarWithSameEmail        = 28,
+    //Meeting settings is not allowed to start a meeting.
+    ZoomSDKMeetingError_disallowHostMeeting             = 29,
     //Failed to write configure file.
     ZoomSDKMeetingError_ConfigFileWriteFailed           = 50,
+    //Forbidden to join the internal meeting.
+    ZoomSDKMeetingError_forbidToJoinInternalMeeting     = 60,
 	// User is removed from meeting by host.
     ZoomSDKMeetingError_RemovedByHost                   = 61,
     //Unknown error.
@@ -508,6 +522,8 @@ typedef enum{
     ZoomSDKRecordingStatus_Stop,
 	//The space of storage is full.
     ZoomSDKRecordingStatus_DiskFull,
+    //Pause recording.
+    ZoomSDKRecordingStatus_Pause,
 }ZoomSDKRecordingStatus;
 
 /**
@@ -532,11 +548,10 @@ typedef enum{
 
 /**
  * @brief Enumeration of H.323 device outgoing call status.
+ * @note The order of enumeration members has been changed.H323CalloutStatus_Unknown has been moved.
  */
 typedef enum
 {
-	//Unknown status.
-    H323CalloutStatus_Unknown,
 	//Call out successfully.
     H323CalloutStatus_Success,
 	//In process of ringing.
@@ -545,6 +560,12 @@ typedef enum
     H323CalloutStatus_Timeout,
 	//Failed to call out.
     H323CalloutStatus_Failed,
+    //Unknown status.
+    H323CalloutStatus_Unknown,
+    //Busy
+    H323CalloutStatus_Busy,
+    //Decline
+    H323CalloutStatus_Decline,
 }H323CalloutStatus;
 
 /**
@@ -749,7 +770,7 @@ typedef enum
  */
 typedef enum
 {
-	//Invitation button: invite others.
+	//Invitation button: invite others.not support since 4.6 version.
     ToolBarInviteButton,
 	//Audio button: manage in-meeting audio of the current user.
     FitBarAudioButton,
@@ -788,7 +809,11 @@ typedef enum
     //Question and answer(QA) button on toolbar. Available only in webinar.
     ToolBarQandAButton,
     //Poll button: questionnaire.
-    ToolBarPollingButton
+    ToolBarPollingButton,
+    //Reaction Button on tool bar.
+    ToolBarReactionsButton,
+    //Share button on tool bar.
+    ToolBarShareButton,
 }SDKButton;
 
 /**
@@ -1162,3 +1187,79 @@ typedef enum {
     //The Q&A is disonnected conflict.
     QAConnectStatus_Disconnect_Conflict,
 }ZoomSDKQAConnectStatus;
+
+/**
+ * @brief Enumerations of Audio action info.
+ */
+typedef enum {
+    //The audio button action info is none.
+    ZoomSDKAudioActionInfo_none = 0,
+    //The audio button action info is need to join voip.
+    ZoomSDKAudioActionInfo_needJoinVoip,
+    //The audio button action info is need to mute/unmute audio.
+    ZoomSDKAudioActionInfo_muteOrUnmenuAudio,
+    //The audio button action info is no audio device connected.
+    ZoomSDKAudioActionInfo_noAudioDeviceConnected,
+    //The audio button action info is computer audio device error.
+    ZoomSDKAudioActionInfo_computerAudioDeviceError,
+}ZoomSDKAudioActionInfo;
+
+/**
+ * @brief Enumerations of breakout meeting status.
+ */
+typedef  enum{
+    //the breakout meeting status is unknow.
+    ZoomSDKBOUserStatus_Unknow = 0,
+    //the breakout meeting status is unassigned.
+    ZoomSDKBOUserStatus_UnAssigned,
+    //the breakout meeting status is not join breakout meeting.
+    ZoomSDKBOUserStatus_Assigned_Not_Join,
+    //the breakout meeting status is in breakout meeting.
+    ZoomSDKBOUserStatus_InBreakOutMeeting,
+}ZoomSDKBOUserStatus;
+
+/**
+ * @brief Enumerations of Interpreter Language.
+ */
+typedef enum{
+    //For initialization.
+    ZoomSDKInterpreLanguage_NONE,
+    //English
+    ZoomSDKInterpreLanguage_US,
+    //Chinese
+    ZoomSDKInterpreLanguage_CN,
+    //Japanese
+    ZoomSDKInterpreLanguage_JP,
+    //German
+    ZoomSDKInterpreLanguage_DE,
+    //French
+    ZoomSDKInterpreLanguage_FR,
+    //Russian
+    ZoomSDKInterpreLanguage_RU,
+    //Portuguese
+    ZoomSDKInterpreLanguage_PT,
+    //Spanish
+    ZoomSDKInterpreLanguage_ES,
+    //Korean
+    ZoomSDKInterpreLanguage_KR,
+} ZoomSDKInterpreLanguage;
+
+/**
+ * @brief Enumerations of limited FPS value.
+ */
+typedef enum {
+    //The value is one.
+    ZoomSDKFPSValue_One,
+    //The value is two.
+    ZoomSDKFPSValue_Two,
+    //The value is four.
+    ZoomSDKFPSValue_Four,
+    //The value is six.
+    ZoomSDKFPSValue_Six,
+    //The value is eight.
+    ZoomSDKFPSValue_Eight,
+    //The value is ten.
+    ZoomSDKFPSValue_Ten,
+    //The value is fifteen.
+    ZoomSDKFPSValue_Fifteen,
+}ZoomSDKFPSValue;

@@ -68,6 +68,15 @@ public:
 
 	//callback
 	void onInviteBtnClicked(bool& bHandled);
+
+	void onStartShareBtnClicked();
+	void onEndMeetingBtnClicked();
+	void onParticipantListBtnClicked();
+	void onCustomLiveStreamMenuClicked();
+	void onZoomInviteDialogFailed();
+	void onCCBTNClicked();
+	void onAudioBtnClicked(ZNAudioBtnClickedCallbackInfo info);
+	void onAudioMenuBtnClicked();
 private:
 	ZNativeSDKMeetingUICtrlWrapSink* m_pSink;
 };

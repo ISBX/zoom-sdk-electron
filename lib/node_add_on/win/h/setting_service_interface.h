@@ -75,9 +75,25 @@ public:
 	virtual ~ISpeakerInfo() {};
 };
 
+/*! \enum LimitFPSValue
+    \brief Specify the values of available limit fps.
+    Here are more detailed enum descriptions.
+*/ 
+enum LimitFPSValue
+{
+	limitfps_Not_Enable, ///<The feature is not enabled.
+	limitfps_1_frame,///<1 frame per second.
+	limitfps_2_frame,///<2 frames per second.
+	limitfps_4_frame,///<4 frames per second.
+	limitfps_6_frame,///<6 frames per second.
+	limitfps_8_frame,///<8 frames per second.
+	limitfps_10_frame,///<10 frames per second.
+	limitfps_15_frame,///<15 frames per second.
+};
+
 /*! \enum SettingTabPage
     \brief Specify the shown tab page at the top of the displayed setting dialog.
-    Here are more detailed structural descriptions.
+    Here are more detailed enum descriptions.
 */ 
 enum SettingTabPage
 {
@@ -96,6 +112,7 @@ typedef struct tagShowSettingDlgParam
 	int left;///<The X-axis value of the top-left corner of the dialog uses the coordinate system of the monitor.
 	HWND hSettingWnd;///<Window handle of the dialog setting.
 	bool bShow;///<Enable to display or nor.
+	bool bCenter;///<Enable to display the dialog at the center of the screen and discard the value of top and left 
 	SettingTabPage eTabPageType; ///<The tab page shown at the top of the displayed setting dialog.
 	tagShowSettingDlgParam()
 	{
@@ -104,6 +121,7 @@ typedef struct tagShowSettingDlgParam
 		left = 0;
 		hSettingWnd = NULL;
 		bShow = true;
+		bCenter = false;
 		eTabPageType = SettingTabPage_General;
 	}
 }ShowSettingDlgParam;
@@ -117,21 +135,25 @@ typedef struct tagSettingDlgShowTabPageOption
 	bool bShowGeneral;///<True indicates to show general page
 	bool bShowVideo; ///<True indicates to show video page
 	bool bShowAudio;///<True indicates to show audio page
+	bool bShowShareScreen; ///<True indicates to show share screen page
 	bool bShowVirtualBackGround;///<True indicates to show virtual background page
 	bool bSHowRecording;///<True indicates to show recording page
 	bool bShowAdvancedFeature;///<True indicates to show advance feature page
 	bool bShowStatistics;///<True indicates to show staticstics page
 	bool bShowFeedback;///<True indicates to show feed back page
+	bool bShowKeyboardShortcuts;///<True indicates to show keyboard shortcuts page
 	bool bShowAccessibility;///<True indicates to show accessibility page
 	tagSettingDlgShowTabPageOption()
 	{
 		bShowGeneral = true;
 		bShowVideo = true;
 		bShowAudio = true;
+		bShowShareScreen = true;
 		bShowVirtualBackGround = true;
 		bSHowRecording = true;
 		bShowStatistics = true;
 		bShowAccessibility = true;
+		bShowKeyboardShortcuts = true;
 		bShowAdvancedFeature = false;
 		bShowFeedback = false;
 	}
@@ -340,7 +362,30 @@ public:
 	/// \brief Determine if remote control of all applications is enabled.
 	/// \return TRUE indicates enabled. FALSE not.
 	virtual bool IsRemoteControlAllApplicationsEnabled() = 0;
-	
+
+	/// \brief Set the visibility of the green border when sharing the application.	/// \param bShow TRUE indicates to display the frame. FALSE hide.	/// \return If the function succeeds, the return value is SDKErr_Success.	///Otherwise failed. To get extended error information, see \link SDKError \endlink enum.
+	virtual SDKError EnableGreenBorderWhenShare(bool bEnable) = 0;
+
+	/// \brief Determine if the green border is enabled when user shares.
+	/// \return TRUE indicates support. FALSE not.
+	virtual bool IsGreenBorderEnabledWhenShare() = 0;
+
+	/// \brief Determine if the 'limited sharing fps' feature is enabled when user shares.
+	/// \return TRUE indicates support. FALSE not.
+	virtual bool IsLimitFPSEnabledWhenShare() = 0;
+
+	/// \brief Enable/disable the 'limited sharing fps' feature when uses shares.	/// \param bEnable TRUE indicates to enable the litmited fps feature. FALSE hide.	/// \return If the function succeeds, the return value is SDKErr_Success.	///Otherwise failed. To get extended error information, see \link SDKError \endlink enum.
+	virtual SDKError EnableLimitFPSWhenShare(bool bEnable) = 0;	
+
+	/// \brief Get the limited sharing fps value when the 'limited sharing fps' feature is enabled.
+	virtual LimitFPSValue GetLimitFPSValueWhenShare() = 0;
+
+	/// \brief Set the limited sharing fps value when the 'limited sharing fps' feature is enabled.
+	/// \param value Specifies the limited fps value. It validates only when the 'limited sharing fps' feature is enabled.
+	/// \return If the function succeeds, the return value is SDKErr_Success.
+	///Otherwise failed. To get extended error information, see \link SDKError \endlink enum.
+	virtual SDKError SetLimitFPSValueWhenShare(LimitFPSValue value) = 0;
+
 };
 
 /*! \enum PREVIEW_VIDEO_ROTATION_ACTION
@@ -558,6 +603,16 @@ public:
 	///For more details, see \link IVideoSettingContextEvent \endlink.
 	/// \remarks You must call the function if you want to monitor the video device plugged in/out.
 	virtual SDKError SetVideoDeviceEvent(IVideoSettingContextEvent* pEvent) = 0;
+
+	/// \brief Enable or disable to show the video preview dialog when join meeting
+	/// \param bEnable TRUE indicates to enable to show the video preview dialog when join meeting
+	/// \return If the function succeeds, the return value is SDKErr_Success.
+	///Otherwise failed. To get extended error information, see \link SDKError \endlink enum.
+	virtual SDKError EnableVideoPreviewDialog(bool bEnable) = 0;
+
+	/// \brief Get the flag to enable to show the video preview dialog when join meeting.
+	/// \return Enabled or disabled.
+	virtual bool IsVideoPreviewDialogEnabled() = 0;
 };
 
 /// \brief Audio setting context callback event.
@@ -727,6 +782,7 @@ public:
 
 };
 
+/// \brief Recording setting context callback event.
 class IRecordingSettingContextEvent
 {
 public:
@@ -994,6 +1050,113 @@ public:
 	/// \param showOption True indicates to show the corresponding tab page for each item.
 	virtual void ConfSettingDialogShownTabPage(SettingDlgShowTabPageOption showOption) = 0;
 };
+/// \brief Virtual background image information interface.
+///
+class IVirtualBGImageInfo
+{
+public:
+	/// \brief Determine the usage of current image.
+	/// \return TRUE indicates that current image is used as the virtual background image.
+	virtual bool isSelected() = 0;
+
+	/// \brief Get the file path of current image.
+	/// \return If the function succeeds, the return value is the file path of current image.
+	///Otherwise failed, the return value is NULL.
+	virtual const wchar_t* GetImageFilePath() = 0;
+
+	/// \brief Get the name of current image.
+	/// \return If the function succeeds, the return value is the name of current image.
+	///Otherwise failed, the return value is NULL.
+	virtual const wchar_t* GetImageName() = 0;
+
+	virtual ~IVirtualBGImageInfo() {};
+};
+
+/// \brief Virtual background context Callback Event.
+///
+class IVirtualBGSettingContextEvent
+{
+public:
+	/// \brief Callback event of notification that the default virtual background images supplied by ZOOM are downloaded.
+	virtual void onVBImageDidDownloaded() = 0;
+	
+	/// \brief Callback event of notification that the virtual background effect is updated with the selected color.
+	/// \param selectedColor The RGB value of the selected color, organized in the format 0xFFRRGGBB. 
+	virtual void onGreenVBDidUpdateWithReplaceColor(DWORD selectedColor) = 0;
+
+	/// \brief Callback event of notification that the virtual background image is changed.
+	virtual void onSelectedVBImageChanged() = 0;
+};
+
+/// \brief Virtual background setting interface.
+class IVirtualBGSettingContext
+{
+public:
+	/// \brief Virtual background callback handler. 
+	/// \param pEvent A pointer to the IVirtualBGSettingContextEvent that receives virtual background event. 
+	/// \return If the function succeeds, the return value is SDKErr_Success.
+	///Otherwise failed. To get extended error information, see \link SDKError \endlink enum.
+	/// \remarks Call the function before using any other interface of the same class.
+	virtual SDKError SetVirtualBGEvent(IVirtualBGSettingContextEvent* pEvent) = 0;
+
+	/// \brief Determine if the virtual background feature is supported by the meeting.
+	/// \return TRUE indicates that the meeting supports the virtual background feature.
+	virtual bool IsSupportVirtualBG() = 0;
+
+	/// \brief Determine if the smart virtual background feature can be supported by the machine.
+	/// \return TRUE indicates that the machine can supports to use smart virtual background feature.
+	virtual bool IsSupportSmartVirtualBG() = 0;
+
+	/// \brief Determine if the green screen is using for the virtual background feature in the meeting.
+	/// \return TRUE indicates to use the green screen for the virtual background feature.
+	virtual bool IsUsingGreenScreenOn() = 0;
+
+	/// \brief Set to use the green screen for the virtual background feature.
+	/// \param bUse Specify to use the green screen or not.TRUE means using the green screen. FALSE means using smart virtual background feature.
+	/// \return If the function succeeds, the return value is SDKErr_Success.
+	///Otherwise failed. To get extended error information, see \link SDKError \endlink enum.
+	///\remarks If the machine can not support smart virtual background feature, Calling of this interface with parameter 'FALSE'will return SDKERR_WRONG_USEAGE.
+	virtual SDKError SetUsingGreenScreen(bool bUse) = 0;
+
+	/// \brief Add a new image as the virtual background image and to the image list.
+	/// \param file_path Specify the file name of the image. It must be the full path with the file name.
+	/// \return If the function succeeds, the return value is SDKErr_Success.
+	///Otherwise failed. To get extended error information, see \link SDKError \endlink enum.
+	virtual SDKError AddBGImage(const wchar_t* file_path) = 0;
+
+	/// \brief Remove an image from the virtual background image list.
+	/// \param pRemoveImage Specify the image to remove. To get extended error information, see \link IVirtualBGImageInfo \endlink enum.
+	/// \return If the function succeeds, the return value is SDKErr_Success.
+	///Otherwise failed. To get extended error information, see \link SDKError \endlink enum.
+	virtual SDKError RemoveBGImage(IVirtualBGImageInfo* pRemoveImage) = 0;
+
+	/// \brief Get the list of the virtual background images.
+	/// \return If there are images in the list, the return value is a list of the poiters to IVirtualBGImageInfo.
+	///Otherwise return NULL. To get extended error information, see \link IVirtualBGImageInfo \endlink enum.
+	virtual IList<IVirtualBGImageInfo* >* GetBGImageList() = 0;
+
+	/// \brief Specify an image to be the virtual background image.
+	/// \param pImage Specify the image to use. To get extended error information, see \link IVirtualBGImageInfo \endlink enum.
+	/// \return If the function succeeds, the return value is SDKErr_Success.
+	///Otherwise failed. To get extended error information, see \link SDKError \endlink enum.
+	virtual SDKError UseBGImage(IVirtualBGImageInfo* pImage) = 0;
+
+	/// \brief Get the selected color after called BeginSelectReplaceVBColor() and selected a color.
+	/// \return If the function succeeds, the return value is the selected color.
+	///Otherwise 0xFF000000. The value is the same one as the callback IVirtualBGSettingContextEvent.onGreenVBDidUpdateWithReplaceColor() does.
+	virtual DWORD GetBGReplaceColor() = 0;
+
+	/// \brief Start to capture a color from video preview.
+	/// \return If the function succeeds, the return value is SDKErr_Success.
+	///Otherwise failed. To get extended error information, see \link SDKError \endlink enum.
+	virtual SDKError BeginSelectReplaceVBColor() = 0;
+
+	/// \brief Get the pointer to ITestVideoDeviceHelper which is used to preview the video with virtual background image.
+	/// \return If the function succeeds, the return value is the pointer to ITestVideoDeviceHelper.
+	///Otherwise failed, returns NULL.
+	///For more details, see \link ITestVideoDeviceHelper \endlink.
+	virtual ITestVideoDeviceHelper* GetTestVideoDeviceHelper() = 0;
+};
 
 /// \brief Meeting setting interface.
 ///
@@ -1053,6 +1216,12 @@ public:
 	///Otherwise failed, returns NULL.
 	///For more details, see \link ISettingUIStrategy \endlink.
 	virtual ISettingUIStrategy* GetSettingUIStrategy() = 0;
+
+	/// \brief Get virtual background interface.
+	/// \return If the function succeeds, the return value is an object pointer to IVirtualBGSettingContext.
+	///Otherwise failed, returns NULL.
+	///For more details, see \link IVirtualBGSettingContext \endlink.
+	virtual IVirtualBGSettingContext* GetVirtualBGSettings() = 0;
 };
 END_ZOOM_SDK_NAMESPACE
 #endif

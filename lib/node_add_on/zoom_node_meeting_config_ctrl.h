@@ -44,12 +44,6 @@ public:
 	/// \brief Set the visibility of the dialog box of waiting for the host after joining the meeting. Only invalidate when the host is not in the meeting.
 	/// \param 1. bDisable(bool) TRUE indicates to hide the dialog box. FALSE not.
 	static void DisableWaitingForHostDialog(const v8::FunctionCallbackInfo<v8::Value>& args);
-	/// \brief Set the visibility of the meeting ID in the title-bar.
-	/// \param 1. bHide(bool) FALSE means to display the content. Otherwise not.
-	static void HideMeetingInfoFromMeetingUITitle(const v8::FunctionCallbackInfo<v8::Value>& args);
-	/// \brief Set the meeting ID in the title-bar of the meeting window. 
-	/// \param 1. meetingNumber(number) Specify the meeting ID in the title-bar of the meeting window.
-	static void SetMeetingIDForMeetingUITitle(const v8::FunctionCallbackInfo<v8::Value>& args);
 	/// \brief Set the visibility of the dialog box if the password is wrong when join the meeting.
 	/// \param 1. bDisable(bool) TRUE indicates to hide the dialog box of wrong password.
 	/// \remarks If it is disabled to display the dialog box of wrong password, the system will directly exit the state of trying to join the meeting.
@@ -150,6 +144,7 @@ public:
 	static void EnableDeclineRemoteControlResponseDlg(const v8::FunctionCallbackInfo<v8::Value>& args);
 	static void EnableLeaveMeetingOptionForHost(const v8::FunctionCallbackInfo<v8::Value>& args);
 	static void EnableVideoButtonOnMeetingUI(const v8::FunctionCallbackInfo<v8::Value>& args);
+	static void EnableAudioButtonOnMeetingUI(const v8::FunctionCallbackInfo<v8::Value>& args);
 	static void EnableEnterAndExitFullScreenButtonOnMeetingUI(const v8::FunctionCallbackInfo<v8::Value>& args);
 	static void RedirectClickShareBTNEvent(const v8::FunctionCallbackInfo<v8::Value>& args);
 	static void RedirectClickEndMeetingBTNEvent(const v8::FunctionCallbackInfo<v8::Value>& args);
@@ -157,6 +152,8 @@ public:
 	static void RedirectClickCustomLiveStreamMenuEvent(const v8::FunctionCallbackInfo<v8::Value>& args);
 	static void RedirectClickParticipantListBTNEvent(const v8::FunctionCallbackInfo<v8::Value>& args);
 	static void RedirectClickCCBTNEvent(const v8::FunctionCallbackInfo<v8::Value>& args);
+	static void RedirectClickAudioBTNEvent(const v8::FunctionCallbackInfo<v8::Value>& args);
+	static void RedirectClickAudioMenuBTNEvent(const v8::FunctionCallbackInfo<v8::Value>& args);
 	static void RedirectMeetingWarningMsg(const v8::FunctionCallbackInfo<v8::Value>& args);
 	static void EnableToolTipsShow(const v8::FunctionCallbackInfo<v8::Value>& args);
 	static void EnableAirplayInstructionWindow(const v8::FunctionCallbackInfo<v8::Value>& args);
@@ -167,7 +164,6 @@ public:
 	static void SetShowAudioUseComputerSoundChkbox(const v8::FunctionCallbackInfo<v8::Value>& args);
 	static void SetShowCallInTab(const v8::FunctionCallbackInfo<v8::Value>& args);
 	static void SetShowCallMeTab(const v8::FunctionCallbackInfo<v8::Value>& args);
-	static void SetAlwaysShowMeetingIDOnTitle(const v8::FunctionCallbackInfo<v8::Value>& args);
 	static void DisableTopMostAttr4SettingDialog(const v8::FunctionCallbackInfo<v8::Value>& args);
 	static void EnableGrabShareWithoutReminder(const v8::FunctionCallbackInfo<v8::Value>& args);
 	static void EnableShowShareSwitchMultiToSingleConfirmDlg(const v8::FunctionCallbackInfo<v8::Value>& args);
@@ -192,15 +188,35 @@ public:
 	static void EnableForceAutoStartMyVideoWhenJoinMeeting(const v8::FunctionCallbackInfo<v8::Value>& args);
 	static void EnableForceAutoStopMyVideoWhenJoinMeeting(const v8::FunctionCallbackInfo<v8::Value>& args);
 	static void DisableAutoShowSelectJoinAudioDlgWhenJoinMeeting(const v8::FunctionCallbackInfo<v8::Value>& args);
+	static void DisableShowJoinMeetingWnd(const v8::FunctionCallbackInfo<v8::Value>& args);
 	static void DisableRemoteCtrlCopyPasteFeature(const v8::FunctionCallbackInfo<v8::Value>& args);
+	static void DisableToolbarInviteButtonClickOriginAction(const v8::FunctionCallbackInfo<v8::Value>& args);
 
+	static void SetShowVideoOptimizeChkbox(const v8::FunctionCallbackInfo<v8::Value>& args);
+	static void GetRequiredInfoType(const v8::FunctionCallbackInfo<v8::Value>& args);
+	static void InputMeetingPasswordAndScreenName(const v8::FunctionCallbackInfo<v8::Value>& args);
+	static void InputMeetingIDAndScreenName(const v8::FunctionCallbackInfo<v8::Value>& args);
+	static void InputMeetingScreenName(const v8::FunctionCallbackInfo<v8::Value>& args);
+	static void MeetingPasswordAndScreenNameHandler_Cancel(const v8::FunctionCallbackInfo<v8::Value>& args);
+	static void GetWebinarNeedRegisterType(const v8::FunctionCallbackInfo<v8::Value>& args);
+	static void GetWebinarRegisterUrl(const v8::FunctionCallbackInfo<v8::Value>& args);
+	static void ReleaseRegisterWebinarByUrl(const v8::FunctionCallbackInfo<v8::Value>& args);
+	static void InputWebinarRegisterEmailAndScreenName(const v8::FunctionCallbackInfo<v8::Value>& args);
+	static void CancelRegisterWebinarByEmail(const v8::FunctionCallbackInfo<v8::Value>& args);
+	static void SetInputMeetingPasswordAndScreenNameNotificationCB(const v8::FunctionCallbackInfo<v8::Value>& args);
+	static void SetAirPlayInstructionWndNotificationCB(const v8::FunctionCallbackInfo<v8::Value>& args);
+	static void SetonWebinarNeedRegisterNotificationCB(const v8::FunctionCallbackInfo<v8::Value>& args);
+	static void SetonEndOtherMeetingToJoinMeetingNotificationCB(const v8::FunctionCallbackInfo<v8::Value>& args);
+	static void SetonFreeMeetingRemainTimeCB(const v8::FunctionCallbackInfo<v8::Value>& args);
+	static void SetonFreeMeetingRemainTimeStopCountDownCB(const v8::FunctionCallbackInfo<v8::Value>& args);
+	//
 	static v8::Persistent<v8::Function> constructor;
 };
 template<>
 static void InitClassAttribute<ZoomNodeMeetingConfigCtrlWrap >(const v8::Local<v8::FunctionTemplate>& tpl, v8::Isolate* isolate)
 {
 	tpl->SetClassName(v8::String::NewFromUtf8(
-		isolate, "ZoomNodeMeetingConfigCtrlWrap"));
+		isolate, "ZoomNodeMeetingConfigCtrlWrap", v8::NewStringType::kInternalized).ToLocalChecked());
 	tpl->InstanceTemplate()->SetInternalFieldCount(1);
 
 	// Prototype
@@ -211,8 +227,6 @@ static void InitClassAttribute<ZoomNodeMeetingConfigCtrlWrap >(const v8::Local<v
 	NODE_SET_PROTOTYPE_METHOD(tpl, "SetDirectShareMonitorID", ZoomNodeMeetingConfigCtrlWrap::SetDirectShareMonitorID);
 	NODE_SET_PROTOTYPE_METHOD(tpl, "SetMeetingUIPos", ZoomNodeMeetingConfigCtrlWrap::SetMeetingUIPos);
 	NODE_SET_PROTOTYPE_METHOD(tpl, "DisableWaitingForHostDialog", ZoomNodeMeetingConfigCtrlWrap::DisableWaitingForHostDialog);
-	NODE_SET_PROTOTYPE_METHOD(tpl, "HideMeetingInfoFromMeetingUITitle", ZoomNodeMeetingConfigCtrlWrap::HideMeetingInfoFromMeetingUITitle);
-	NODE_SET_PROTOTYPE_METHOD(tpl, "SetMeetingIDForMeetingUITitle", ZoomNodeMeetingConfigCtrlWrap::SetMeetingIDForMeetingUITitle);
 	NODE_SET_PROTOTYPE_METHOD(tpl, "DisablePopupMeetingWrongPSWDlg", ZoomNodeMeetingConfigCtrlWrap::DisablePopupMeetingWrongPSWDlg);
 	NODE_SET_PROTOTYPE_METHOD(tpl, "EnableAutoEndOtherMeetingWhenStartMeeting", ZoomNodeMeetingConfigCtrlWrap::EnableAutoEndOtherMeetingWhenStartMeeting);
 	NODE_SET_PROTOTYPE_METHOD(tpl, "EnableLButtonDBClick4SwitchFullScreenMode", ZoomNodeMeetingConfigCtrlWrap::EnableLButtonDBClick4SwitchFullScreenMode);
@@ -222,6 +236,7 @@ static void InitClassAttribute<ZoomNodeMeetingConfigCtrlWrap >(const v8::Local<v
 	NODE_SET_PROTOTYPE_METHOD(tpl, "EnableDeclineRemoteControlResponseDlg", ZoomNodeMeetingConfigCtrlWrap::EnableDeclineRemoteControlResponseDlg);
 	NODE_SET_PROTOTYPE_METHOD(tpl, "EnableLeaveMeetingOptionForHost", ZoomNodeMeetingConfigCtrlWrap::EnableLeaveMeetingOptionForHost);
 	NODE_SET_PROTOTYPE_METHOD(tpl, "EnableVideoButtonOnMeetingUI", ZoomNodeMeetingConfigCtrlWrap::EnableVideoButtonOnMeetingUI);
+	NODE_SET_PROTOTYPE_METHOD(tpl, "EnableAudioButtonOnMeetingUI", ZoomNodeMeetingConfigCtrlWrap::EnableAudioButtonOnMeetingUI);
 	NODE_SET_PROTOTYPE_METHOD(tpl, "EnableEnterAndExitFullScreenButtonOnMeetingUI", ZoomNodeMeetingConfigCtrlWrap::EnableEnterAndExitFullScreenButtonOnMeetingUI);
 	NODE_SET_PROTOTYPE_METHOD(tpl, "RedirectClickShareBTNEvent", ZoomNodeMeetingConfigCtrlWrap::RedirectClickShareBTNEvent);
 	NODE_SET_PROTOTYPE_METHOD(tpl, "RedirectClickEndMeetingBTNEvent", ZoomNodeMeetingConfigCtrlWrap::RedirectClickEndMeetingBTNEvent);
@@ -229,6 +244,8 @@ static void InitClassAttribute<ZoomNodeMeetingConfigCtrlWrap >(const v8::Local<v
 	NODE_SET_PROTOTYPE_METHOD(tpl, "RedirectClickCustomLiveStreamMenuEvent", ZoomNodeMeetingConfigCtrlWrap::RedirectClickCustomLiveStreamMenuEvent);
 	NODE_SET_PROTOTYPE_METHOD(tpl, "RedirectClickParticipantListBTNEvent", ZoomNodeMeetingConfigCtrlWrap::RedirectClickParticipantListBTNEvent);
 	NODE_SET_PROTOTYPE_METHOD(tpl, "RedirectClickCCBTNEvent", ZoomNodeMeetingConfigCtrlWrap::RedirectClickCCBTNEvent);
+	NODE_SET_PROTOTYPE_METHOD(tpl, "RedirectClickAudioBTNEvent", ZoomNodeMeetingConfigCtrlWrap::RedirectClickAudioBTNEvent);
+	NODE_SET_PROTOTYPE_METHOD(tpl, "RedirectClickAudioMenuBTNEvent", ZoomNodeMeetingConfigCtrlWrap::RedirectClickAudioMenuBTNEvent);
 	NODE_SET_PROTOTYPE_METHOD(tpl, "RedirectMeetingWarningMsg", ZoomNodeMeetingConfigCtrlWrap::RedirectMeetingWarningMsg);
 	NODE_SET_PROTOTYPE_METHOD(tpl, "EnableToolTipsShow", ZoomNodeMeetingConfigCtrlWrap::EnableToolTipsShow);
 	NODE_SET_PROTOTYPE_METHOD(tpl, "EnableAirplayInstructionWindow", ZoomNodeMeetingConfigCtrlWrap::EnableAirplayInstructionWindow);
@@ -239,7 +256,6 @@ static void InitClassAttribute<ZoomNodeMeetingConfigCtrlWrap >(const v8::Local<v
 	NODE_SET_PROTOTYPE_METHOD(tpl, "SetShowAudioUseComputerSoundChkbox", ZoomNodeMeetingConfigCtrlWrap::SetShowAudioUseComputerSoundChkbox);
 	NODE_SET_PROTOTYPE_METHOD(tpl, "SetShowCallInTab", ZoomNodeMeetingConfigCtrlWrap::SetShowCallInTab);
 	NODE_SET_PROTOTYPE_METHOD(tpl, "SetShowCallMeTab", ZoomNodeMeetingConfigCtrlWrap::SetShowCallMeTab);
-	NODE_SET_PROTOTYPE_METHOD(tpl, "SetAlwaysShowMeetingIDOnTitle", ZoomNodeMeetingConfigCtrlWrap::SetAlwaysShowMeetingIDOnTitle);
 	NODE_SET_PROTOTYPE_METHOD(tpl, "DisableTopMostAttr4SettingDialog", ZoomNodeMeetingConfigCtrlWrap::DisableTopMostAttr4SettingDialog);
 	NODE_SET_PROTOTYPE_METHOD(tpl, "EnableGrabShareWithoutReminder", ZoomNodeMeetingConfigCtrlWrap::EnableGrabShareWithoutReminder);
 	NODE_SET_PROTOTYPE_METHOD(tpl, "EnableShowShareSwitchMultiToSingleConfirmDlg", ZoomNodeMeetingConfigCtrlWrap::EnableShowShareSwitchMultiToSingleConfirmDlg);
@@ -264,7 +280,9 @@ static void InitClassAttribute<ZoomNodeMeetingConfigCtrlWrap >(const v8::Local<v
 	NODE_SET_PROTOTYPE_METHOD(tpl, "EnableForceAutoStartMyVideoWhenJoinMeeting", ZoomNodeMeetingConfigCtrlWrap::EnableForceAutoStartMyVideoWhenJoinMeeting);
 	NODE_SET_PROTOTYPE_METHOD(tpl, "EnableForceAutoStopMyVideoWhenJoinMeeting", ZoomNodeMeetingConfigCtrlWrap::EnableForceAutoStopMyVideoWhenJoinMeeting);
 	NODE_SET_PROTOTYPE_METHOD(tpl, "DisableAutoShowSelectJoinAudioDlgWhenJoinMeeting", ZoomNodeMeetingConfigCtrlWrap::DisableAutoShowSelectJoinAudioDlgWhenJoinMeeting);
+	NODE_SET_PROTOTYPE_METHOD(tpl, "DisableShowJoinMeetingWnd", ZoomNodeMeetingConfigCtrlWrap::DisableShowJoinMeetingWnd);
 	NODE_SET_PROTOTYPE_METHOD(tpl, "DisableRemoteCtrlCopyPasteFeature", ZoomNodeMeetingConfigCtrlWrap::DisableRemoteCtrlCopyPasteFeature);
+	NODE_SET_PROTOTYPE_METHOD(tpl, "DisableToolbarInviteButtonClickOriginAction", ZoomNodeMeetingConfigCtrlWrap::DisableToolbarInviteButtonClickOriginAction);
 
 	NODE_SET_PROTOTYPE_METHOD(tpl, "PrePopulateWebinarRegistrationInfo", ZoomNodeMeetingConfigCtrlWrap::PrePopulateWebinarRegistrationInfo);
 	NODE_SET_PROTOTYPE_METHOD(tpl, "GetReminderType", ZoomNodeMeetingConfigCtrlWrap::GetReminderType);
@@ -287,6 +305,24 @@ static void InitClassAttribute<ZoomNodeMeetingConfigCtrlWrap >(const v8::Local<v
 	NODE_SET_PROTOTYPE_METHOD(tpl, "ForceDisableMultiShare", ZoomNodeMeetingConfigCtrlWrap::ForceDisableMultiShare);
 	NODE_SET_PROTOTYPE_METHOD(tpl, "SetMaxDurationForOnlyHostInMeeting", ZoomNodeMeetingConfigCtrlWrap::SetMaxDurationForOnlyHostInMeeting);
 	NODE_SET_PROTOTYPE_METHOD(tpl, "EnableLocalRecordingConvertProgressBarDialog", ZoomNodeMeetingConfigCtrlWrap::EnableLocalRecordingConvertProgressBarDialog);
+
+	NODE_SET_PROTOTYPE_METHOD(tpl, "SetShowVideoOptimizeChkbox", ZoomNodeMeetingConfigCtrlWrap::SetShowVideoOptimizeChkbox);
+	NODE_SET_PROTOTYPE_METHOD(tpl, "GetRequiredInfoType", ZoomNodeMeetingConfigCtrlWrap::GetRequiredInfoType);
+	NODE_SET_PROTOTYPE_METHOD(tpl, "InputMeetingPasswordAndScreenName", ZoomNodeMeetingConfigCtrlWrap::InputMeetingPasswordAndScreenName);
+	NODE_SET_PROTOTYPE_METHOD(tpl, "InputMeetingIDAndScreenName", ZoomNodeMeetingConfigCtrlWrap::InputMeetingIDAndScreenName);
+	NODE_SET_PROTOTYPE_METHOD(tpl, "InputMeetingScreenName", ZoomNodeMeetingConfigCtrlWrap::InputMeetingScreenName);
+	NODE_SET_PROTOTYPE_METHOD(tpl, "MeetingPasswordAndScreenNameHandler_Cancel", ZoomNodeMeetingConfigCtrlWrap::MeetingPasswordAndScreenNameHandler_Cancel);
+	NODE_SET_PROTOTYPE_METHOD(tpl, "GetWebinarNeedRegisterType", ZoomNodeMeetingConfigCtrlWrap::GetWebinarNeedRegisterType);
+	NODE_SET_PROTOTYPE_METHOD(tpl, "GetWebinarRegisterUrl", ZoomNodeMeetingConfigCtrlWrap::GetWebinarRegisterUrl);
+	NODE_SET_PROTOTYPE_METHOD(tpl, "ReleaseRegisterWebinarByUrl", ZoomNodeMeetingConfigCtrlWrap::ReleaseRegisterWebinarByUrl);
+	NODE_SET_PROTOTYPE_METHOD(tpl, "InputWebinarRegisterEmailAndScreenName", ZoomNodeMeetingConfigCtrlWrap::InputWebinarRegisterEmailAndScreenName);
+	NODE_SET_PROTOTYPE_METHOD(tpl, "CancelRegisterWebinarByEmail", ZoomNodeMeetingConfigCtrlWrap::CancelRegisterWebinarByEmail);
+	NODE_SET_PROTOTYPE_METHOD(tpl, "SetInputMeetingPasswordAndScreenNameNotificationCB", ZoomNodeMeetingConfigCtrlWrap::SetInputMeetingPasswordAndScreenNameNotificationCB);
+	NODE_SET_PROTOTYPE_METHOD(tpl, "SetAirPlayInstructionWndNotificationCB", ZoomNodeMeetingConfigCtrlWrap::SetAirPlayInstructionWndNotificationCB);
+	NODE_SET_PROTOTYPE_METHOD(tpl, "SetonWebinarNeedRegisterNotificationCB", ZoomNodeMeetingConfigCtrlWrap::SetonWebinarNeedRegisterNotificationCB);
+	NODE_SET_PROTOTYPE_METHOD(tpl, "SetonEndOtherMeetingToJoinMeetingNotificationCB", ZoomNodeMeetingConfigCtrlWrap::SetonEndOtherMeetingToJoinMeetingNotificationCB);
+	NODE_SET_PROTOTYPE_METHOD(tpl, "SetonFreeMeetingRemainTimeCB", ZoomNodeMeetingConfigCtrlWrap::SetonFreeMeetingRemainTimeCB);
+	NODE_SET_PROTOTYPE_METHOD(tpl, "SetonFreeMeetingRemainTimeStopCountDownCB", ZoomNodeMeetingConfigCtrlWrap::SetonFreeMeetingRemainTimeStopCountDownCB);
 }
 template<>
 static v8::Persistent<v8::Function>* GetConstructor<ZoomNodeMeetingConfigCtrlWrap >() {

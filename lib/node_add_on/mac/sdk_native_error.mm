@@ -111,9 +111,6 @@ ZNSDKUserType nativeErrorTypeHelp::ZoomSDKUserTypeChange(ZoomSDKUserType &type)
 {
     ZNSDKUserType ret = ZNSDK_UT_NORMALUSER;
     switch (type) {
-        case ZoomSDKUserType_APIUser:
-            ret = ZNSDK_UT_APIUSER;
-            break;
         case ZoomSDKUserType_ZoomUser:
             ret = ZNSDK_UT_NORMALUSER;
             break;
@@ -128,16 +125,13 @@ ZNSDKUserType nativeErrorTypeHelp::ZoomSDKUserTypeChange(ZoomSDKUserType &type)
 
 ZoomSDKUserType nativeErrorTypeHelp::ZNSDKUserTypeChange(ZNSDKUserType &type)
 {
-    ZoomSDKUserType ret = ZoomSDKUserType_APIUser;
+    ZoomSDKUserType ret = ZoomSDKUserType_WithoutLogin;
     switch (type) {
         case ZNSDK_UT_WITHOUT_LOGIN:
             ret = ZoomSDKUserType_SSOUser;
             break;
         case ZNSDK_UT_NORMALUSER:
             ret = ZoomSDKUserType_ZoomUser;
-            break;
-        case ZNSDK_UT_APIUSER:
-            ret = ZoomSDKUserType_APIUser;
             break;
         default:
             break;
@@ -293,13 +287,14 @@ ZoomSDKMeetingStatus nativeErrorTypeHelp::ZoomSDKMeetingStatusC(ZNMeetingStatus 
     }
     return ret;
 }
-#pragma lanaguage
+#pragma mark lanaguage
+static NSString* const kZMFollowSystemIdentify = @"follow system language";
 NSString *nativeErrorTypeHelp::ZNSDKLanaguageChanage(ZNSDK_LANGUAGE_ID &lanaguageid)
 {
-    NSString *ret = @"en";
+    NSString *ret = kZMFollowSystemIdentify;
     switch (lanaguageid) {
         case ZNLANGUAGE_Unknow:
-            ret = @"en";
+            ret = kZMFollowSystemIdentify;
             break;
         case ZNLANGUAGE_English:
             ret = @"en";
@@ -327,6 +322,9 @@ NSString *nativeErrorTypeHelp::ZNSDKLanaguageChanage(ZNSDK_LANGUAGE_ID &lanaguag
             break;
         case ZNLANGUAGE_Russian:
             ret = @"ru";
+            break;
+        case ZNLANGUAGE_Korean:
+            ret = @"ko-KR";
             break;
         default:
             break;
@@ -574,6 +572,12 @@ ZNH323CalloutStatus nativeErrorTypeHelp::ZoomSDKH323Status(H323CalloutStatus &st
             break;
         case H323CalloutStatus_Failed:
             ret = ZN_H323Callout_Failed;
+            break;
+        case H323CalloutStatus_Busy:
+            ret = ZN_H323Callout_Busy;
+            break;
+        case H323CalloutStatus_Decline:
+            ret = ZN_H323Callout_Decline;
             break;
         default:
             break;
@@ -830,7 +834,7 @@ ZNMeetingFailCode  nativeErrorTypeHelp::ZNSDKMeetingFailCode(ZoomSDKMeetingError
             ret = ZNMEETING_FAIL_MEETING_USER_FULL;
             break;
         case ZoomSDKMeetingError_ClientIncompatible:
-            ret = ZNCONF_FAIL_ZC_CERTIFICATE_CHANGED;
+            ret = ZNMEETING_FAIL_CLIENT_INCOMPATIBLE;
             break;
         case ZoomSDKMeetingError_NoMMR:
             ret = ZNMEETING_FAIL_NO_MMR;
@@ -886,6 +890,18 @@ ZNMeetingFailCode  nativeErrorTypeHelp::ZNSDKMeetingFailCode(ZoomSDKMeetingError
         case ZoomSDKMeetingError_None:
             ret = ZNMEETING_SUCCESS;
             break;
+        case ZoomSDKMeetingError_vanityNotExist:
+            ret = ZNCONF_FAIL_VANITY_NOT_EXIST;
+            break;
+        case ZoomSDKMeetingError_joinWebinarWithSameEmail:
+            ret = ZNCONF_FAIL_JOIN_WEBINAR_WITHSAMEEMAIL;
+            break;
+        case ZoomSDKMeetingError_disallowHostMeeting:
+            ret = ZNCONF_FAIL_DISALLOW_HOST_MEETING;
+            break;
+        case ZoomSDKMeetingError_forbidToJoinInternalMeeting:
+            ret = ZNMEETING_FAIL_FORBID_TO_JOIN_INTERNAL_MEETING;
+            break;
         default:
             break;
     }
@@ -894,7 +910,7 @@ ZNMeetingFailCode  nativeErrorTypeHelp::ZNSDKMeetingFailCode(ZoomSDKMeetingError
 
 ZoomSDKLocale nativeErrorTypeHelp::ZNSDKAPPLocalType(ZNSDK_APP_Locale &local)
 {
-    ZoomSDKLocale applocal = ZoomSDKLocale_CN;
+    ZoomSDKLocale applocal = ZoomSDKLocale_Def;
     switch (local) {
         case ZNSDK_APP_Locale_CN:
             applocal = ZoomSDKLocale_CN;
@@ -938,6 +954,69 @@ ZNSMSVerificationCodeErr nativeErrorTypeHelp::ZNSDKSMSVerificationCodeError(Zoom
             break;
         case ZoomSDKSMSError_Verify_UnknownError:
             ret = ZNSMSVerificationCodeErr_Verify_UnknownError;
+            break;
+        default:
+            break;
+    }
+    return ret;
+}
+
+ZNAudioCallbackActionInfo nativeErrorTypeHelp::ZNSDKAudioCallbackAction(ZoomSDKAudioActionInfo &info)
+{
+    ZNAudioCallbackActionInfo ret = ZNACTION_INFO_NONE;
+    switch (info) {
+        case ZoomSDKAudioActionInfo_none:
+            ret = ZNACTION_INFO_NONE;
+            break;
+        case ZoomSDKAudioActionInfo_needJoinVoip:
+            ret = ZNACTION_INFO_NEED_JOIN_VOIP;
+            break;
+        case ZoomSDKAudioActionInfo_muteOrUnmenuAudio:
+            ret = ZNACTION_INFO_MUTE_UNMUTE_AUDIO;
+            break;
+        case ZoomSDKAudioActionInfo_noAudioDeviceConnected:
+            ret = ZNACTION_INFO_CHOOSE_AUDIO_DEVICE_NOAUDIODEVICECONNECTTED;
+            break;
+        case ZoomSDKAudioActionInfo_computerAudioDeviceError:
+            ret = ZNACTION_INFO_CHOOSE_AUDIO_DEVICE_COMPUTERAUDIODEVICEERROR;
+            break;
+        default:
+            break;
+    }
+    return ret;
+}
+
+ZNWebinarNeedRegisterType nativeErrorTypeHelp::ZNSDKWebinarNeedRegisterType(WebinarRegisterType &type)
+{
+    ZNWebinarNeedRegisterType ret = ZNWebinarReg_NONE;
+    switch (type) {
+        case WebinarRegisterType_None:
+            ret = ZNWebinarReg_NONE;
+            break;
+        case WebinarRegisterType_URL:
+            ret = ZNWebinarReg_By_Register_Url;
+            break;
+        case WebinarRegisterType_Email:
+            ret = ZNWebinarReg_By_Email_and_DisplayName;
+            break;
+        default:
+            break;
+    }
+    return ret;
+}
+
+ZNRequiredInfoType nativeErrorTypeHelp::ZNSDKRequiredInfoType(JoinMeetingReqInfoType &type)
+{
+    ZNRequiredInfoType ret = ZNREQUIRED_INFO_TYPE_NONE;
+    switch (type) {
+        case JoinMeetingReqInfoType_None:
+            ret = ZNREQUIRED_INFO_TYPE_NONE;
+            break;
+        case JoinMeetingReqInfoType_Password:
+            ret = ZNREQUIRED_INFO_TYPE_Password;
+            break;
+        case JoinMeetingReqInfoType_Password_Wrong:
+            ret = ZNREQUIRED_INFO_TYPE_Password4WrongPassword;
             break;
         default:
             break;

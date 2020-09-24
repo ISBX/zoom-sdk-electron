@@ -6,27 +6,43 @@
 	<dict>
 		<key>Resources/Droplet.pcm</key>
 		<data>
-		5UF4RkG2M78SJMmLOWL1OspSgxc=
+		TBn4R/qP31XieyhHv+CXia37nlk=
+		</data>
+		<key>Resources/Hangup.WAV</key>
+		<data>
+		Vo0ZGDEQSk86yAxJBBlFWnYBCf0=
 		</data>
 		<key>Resources/Info.plist</key>
 		<data>
-		OG0nkzzIVTlLxjgMQMzAE6F5AQ4=
+		4xQXy2uyWRMupXDmdGavCNg6qf8=
 		</data>
 		<key>Resources/ZoomSDK.def</key>
 		<data>
-		h71LjwrpxzSHLWObuFidj3pUTe0=
+		7FdPOKJzcI+N5ros11m2/yUB/S0=
 		</data>
 		<key>Resources/dingdong.pcm</key>
 		<data>
-		eq8pGi0sexX0bRwcZIKzemhKLlE=
+		PyyM/PvsR+tgMBKqFBGzsSbCw14=
 		</data>
 		<key>Resources/dingdong1.pcm</key>
 		<data>
 		wiuwLYJRamb4Rz27Qgm/Irtg+hQ=
 		</data>
+		<key>Resources/dtmf_a.wav</key>
+		<data>
+		hFOZ1cq578et5ITj8398st2+aCQ=
+		</data>
 		<key>Resources/leave.pcm</key>
 		<data>
-		Ts+5QfnGvdUTX+SAz93PniuW2+c=
+		IOnRKaZn+yKcwYKAEAB61n5GdDQ=
+		</data>
+		<key>Resources/meeting_chat_chime.pcm</key>
+		<data>
+		I4kPvB9mwQYcYLgodllWbGmyl9E=
+		</data>
+		<key>Resources/meeting_raisehand_chime.pcm</key>
+		<data>
+		S1XH4lezKBuyAKDArRoj8Lon2eo=
 		</data>
 		<key>Resources/record_start.pcm</key>
 		<data>
@@ -38,7 +54,11 @@
 		</data>
 		<key>Resources/ring.pcm</key>
 		<data>
-		lc49ZlVeOOaOCExrciWq04rK98E=
+		SM9KAlE3FkEaTPpFW4dVkFUqOLo=
+		</data>
+		<key>Resources/ring_pstn.wav</key>
+		<data>
+		gEc6SNpNzg7ass1+snzcq/oQTjY=
 		</data>
 		<key>Resources/zcacert.pem</key>
 		<data>
@@ -51,11 +71,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			8jSMqw7OmzNFQVdg96v4DTHqzhg=
+			sMq4rbbZZeDuYueoXI8VVexyXBI=
 			</data>
 			<key>hash2</key>
 			<data>
-			yVMkEeBU0qgzZxRwNqqgaMSknDEF6oy/xZoGZ2g0GKs=
+			67Oso9g7bJv8gVf4GAK9byA8RojvRI5IqCsO/9ox0jI=
 			</data>
 		</dict>
 		<key>Headers/ZoomSDKASController.h</key>
@@ -73,11 +93,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			vQ8tm5kx+ubGx0Hk8XJRgyeKC/U=
+			99ugvPSz1FzsMM9ZIKZx/k8TBPI=
 			</data>
 			<key>hash2</key>
 			<data>
-			J7+2ZoV+Y/vTmr8fAanHd3IiBVfgWAhgGKV7aBG5IXY=
+			IxxTl/lbmmI9vPvL6K7z+GoMpy8AY4gnI7RNgqcis5E=
 			</data>
 		</dict>
 		<key>Headers/ZoomSDKBreakoutRoomsController.h</key>
@@ -117,11 +137,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			hvJTbO8d0L2dk3Q/ab8tGLqTf18=
+			qlPtfL/ZaCCzlKeNgj9NQ4s3xnk=
 			</data>
 			<key>hash2</key>
 			<data>
-			fBDEbuOyZdgw1IpAoulG2JgmGbSOCJKIFTgiecjhNvw=
+			EomkS8kxX7vjXWA33ucZfZ8TilJ9es6MuU1kgqo8G1Y=
 			</data>
 		</dict>
 		<key>Headers/ZoomSDKH323Helper.h</key>
@@ -150,66 +170,77 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			FHmceNbFBNq16yrF4To2B7afyfQ=
+			PkiV1DV9UI82oBnRVdktIU7U6Go=
 			</data>
 			<key>hash2</key>
 			<data>
-			EZer0bSPpYAeRR2wev5nh4hi4iSuSY7ikLlEHHZuDao=
+			I7ORxWvk/ztc9DePNHSgtGsXutmac6pdx21faMEalwI=
 			</data>
 		</dict>
 		<key>Headers/ZoomSDKMeetingConfiguration.h</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			TxcHU80GAAjVNZX523LSm8/cHDM=
+			qNg0qZEJ7uv4uTfB33DIBOtPZ5E=
 			</data>
 			<key>hash2</key>
 			<data>
-			yuhepS/0WsPcz+Mj0gCTPlHqnZkYgzlHtwFQo1JREHY=
+			yF8q3Sfoeox9QyKsZcxErX+NgoF3+hAK9gsx9cgaKbw=
 			</data>
 		</dict>
 		<key>Headers/ZoomSDKMeetingRecordController.h</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			6xnQc5W69TxehWZjd3TY8Sc9omU=
+			9AXS57+0Id6dgZB9dFA9aI0NVIk=
 			</data>
 			<key>hash2</key>
 			<data>
-			ug3GArR7hRXYlmvUZYqNaEUBFES7QikvCVDKnh3TN+8=
+			tuENjnOe4QFrn2B6hDHinjdjjQJr0SnWljMi5gbeX/A=
 			</data>
 		</dict>
 		<key>Headers/ZoomSDKMeetingService.h</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			KenZOCzRmWbgueXRk2MlDQFewVw=
+			Hry3v3EeFxyWz81wUUOgNJMHI10=
 			</data>
 			<key>hash2</key>
 			<data>
-			bNJSZs/FxtJl3veLjCnU1JoHinMlqTYvxSt8BFLz4w0=
+			aGQVb1OzuBBIz4yssVqRjxJvrFOJ2OI0J+khOEtjK0A=
 			</data>
 		</dict>
 		<key>Headers/ZoomSDKMeetingUIController.h</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			BXkqxFiWgkvX7eNl6EKk3MiBaaU=
+			QHpNvsYIjEgiFgAWkAwzkOBkG3s=
 			</data>
 			<key>hash2</key>
 			<data>
-			fAgYtUg6L6q3nAFekcsGAacUF0uamcSDP3AVVc6xXbo=
+			gkhacV0BPLHBvCxCQYTBI/xLqh5NobSua3rsWV2Kkv4=
 			</data>
 		</dict>
 		<key>Headers/ZoomSDKNetworkService.h</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			dGL51YhyP1XcWsqXSlc5JPJUb3s=
+			gfItGaa8tFoSIaMZ/98LpLeExNM=
 			</data>
 			<key>hash2</key>
 			<data>
-			lS8UaQwYY7Y8IKaiX7b31Iy8YP+9GzXoQBCqQmp+AY4=
+			WJOO8yEAJu/8vuFBXHXlkuGNrGw3/CqS4fkewNEq2dw=
+			</data>
+		</dict>
+		<key>Headers/ZoomSDKNewBreakoutRoomController.h</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			bc+BuoQ8NGFXw+TODlrFSfeZR/Y=
+			</data>
+			<key>hash2</key>
+			<data>
+			dAxnPfcwGEWwQCQFXnLiSGWXX9k/Ltf9W3Ev3rol6u8=
 			</data>
 		</dict>
 		<key>Headers/ZoomSDKPhoneHelper.h</key>
@@ -227,11 +258,22 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			fJOHCNjNNqh018NSgMi6iRcau84=
+			1GZQi7kdiLQcyuraDxqGZ5qGFPc=
 			</data>
 			<key>hash2</key>
 			<data>
-			qTz9lppEgoPXcFZw0UqjyrIk0Wma0z1QpomKzqo+M8c=
+			gcaRU8m5SHD3R/Uj6kke8HHH+h1AcNcJG2XARrnkFzQ=
+			</data>
+		</dict>
+		<key>Headers/ZoomSDKQAController.h</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			3XndRzeDlZK5sb+5VX0zgSIAVgE=
+			</data>
+			<key>hash2</key>
+			<data>
+			fO50uev/54CsoT9cle5D1nE8/zY6fv96ebvSR4eJiVM=
 			</data>
 		</dict>
 		<key>Headers/ZoomSDKRawDataController.h</key>
@@ -249,11 +291,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			bwuVB1EJY4cGgr92GALEgXIqxss=
+			8ew8ipa4iqZTJJ/WBZtfW9Xbl+I=
 			</data>
 			<key>hash2</key>
 			<data>
-			6Ciz3OpRYNpYnW4B2yPTu6YSM13glaiej1E0WbmzK7s=
+			blfLEREY8R01Np9EpHMJrtqrgAusGP9EwFP42CXCZIQ=
 			</data>
 		</dict>
 		<key>Headers/ZoomSDKRemoteControllerHelper.h</key>
@@ -271,11 +313,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			hLNlUYw+WAOAyDV9mEBnhVHAMnc=
+			fsdYNn7gVOs56OG+QCqxED0a7Tk=
 			</data>
 			<key>hash2</key>
 			<data>
-			TWaiGVo9vhsxT+tyAFHMg/xVqMRwEFw7p7JPTahX8a0=
+			8+fzlCQNFr6G4SBPKX3vFUAfkXevQKzbR2Wp/glOzcc=
 			</data>
 		</dict>
 		<key>Headers/ZoomSDKShareContainer.h</key>
@@ -298,17 +340,6 @@
 			<key>hash2</key>
 			<data>
 			MafLAtIc1zmxHV4PK9pcFrp9lyzocQ1PX2GlxKR1+cM=
-			</data>
-		</dict>
-		<key>Headers/ZoomSDKUpgradeAccountHelper.h</key>
-		<dict>
-			<key>hash</key>
-			<data>
-			mrmaSgwgVq3LCtWe+b4C9+pmCb4=
-			</data>
-			<key>hash2</key>
-			<data>
-			QstHvWCY7Ve/GX+c1WtZ1AJpu7yFMjYnRzY8u0FYKmA=
 			</data>
 		</dict>
 		<key>Headers/ZoomSDKVideoContainer.h</key>
@@ -348,22 +379,33 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			+Yg2fWH4xOJ/mCGwjeMHNgs7ahs=
+			2mopZvOUlYVubxs+UZYXZbJa/Bs=
 			</data>
 			<key>hash2</key>
 			<data>
-			W5IoceW778zQEl20JaLyZP9CnJgt+hvQxSoXaOXmaw4=
+			TcyiJ6dPfAZg8ecbffzpyn2pnJBuFmbKLk8Uearkgws=
+			</data>
+		</dict>
+		<key>Headers/zoom_sdk_raw_data_def.h</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			WHSsIBr70ZrdwOrz1vi498AvCwA=
+			</data>
+			<key>hash2</key>
+			<data>
+			n58MUjH30AWjPehadn54ckpIKrVPpuyHXO3lptLvz/g=
 			</data>
 		</dict>
 		<key>Headers/zoom_sdk_raw_data_helper_interface.h</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			cbL0uVyvOixdBc5r9lXaOpDUsxE=
+			j0QXP9GY+37F4swlNg92Nnw7uJ0=
 			</data>
 			<key>hash2</key>
 			<data>
-			fncXCpXx2Gt8Bt34H7T5IVWNvTPb9bMqC/2JiiWGSbQ=
+			AySSwNiC0jkPWfail4csK3GcndcQRNoVciyEDhio4d8=
 			</data>
 		</dict>
 		<key>Modules/module.modulemap</key>
@@ -381,44 +423,55 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			5UF4RkG2M78SJMmLOWL1OspSgxc=
+			TBn4R/qP31XieyhHv+CXia37nlk=
 			</data>
 			<key>hash2</key>
 			<data>
-			lmhyRzbBKAh+5CcGzsmIXEKPfFrkF8tfZrWjNTU0DhI=
+			NWjboApV0ltzZzekgWPBPBNIr8XUAiopyg03JNKf/p8=
+			</data>
+		</dict>
+		<key>Resources/Hangup.WAV</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			Vo0ZGDEQSk86yAxJBBlFWnYBCf0=
+			</data>
+			<key>hash2</key>
+			<data>
+			iYb4GPBdHkgX+MjM6O3BtkD9PFEqE5zkWDuBZlBNzqc=
 			</data>
 		</dict>
 		<key>Resources/Info.plist</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			OG0nkzzIVTlLxjgMQMzAE6F5AQ4=
+			4xQXy2uyWRMupXDmdGavCNg6qf8=
 			</data>
 			<key>hash2</key>
 			<data>
-			/krDe8CcoKCj2Qrhs19vmwdv5Jm6hg4ETLGOXcXSW6s=
+			ssYAFKziOuQryOYILKXHEa1sQgFEiZjvy+qzLqvgN4I=
 			</data>
 		</dict>
 		<key>Resources/ZoomSDK.def</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			h71LjwrpxzSHLWObuFidj3pUTe0=
+			7FdPOKJzcI+N5ros11m2/yUB/S0=
 			</data>
 			<key>hash2</key>
 			<data>
-			P0ZLUVGDILsMABigirIJzDfCt9cVpRY71RAdkDhfbrc=
+			wx6dlhekYA3kVQCDeLJPdgYX4LAsjUcKRuChfXvoJbo=
 			</data>
 		</dict>
 		<key>Resources/dingdong.pcm</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			eq8pGi0sexX0bRwcZIKzemhKLlE=
+			PyyM/PvsR+tgMBKqFBGzsSbCw14=
 			</data>
 			<key>hash2</key>
 			<data>
-			gKmiShnJdJ99dtLjo3WHoZrIEmWd4udrULCPXyk4hM0=
+			Xj2Q9JxHA2uNhrrjrEGR43lgNXz6ciOwhJV/rBQqASQ=
 			</data>
 		</dict>
 		<key>Resources/dingdong1.pcm</key>
@@ -432,15 +485,48 @@
 			L7u5rmpGOzYOFFm+5Vja+o2GTbJCPw/k0sVtIsPzpaI=
 			</data>
 		</dict>
+		<key>Resources/dtmf_a.wav</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			hFOZ1cq578et5ITj8398st2+aCQ=
+			</data>
+			<key>hash2</key>
+			<data>
+			Q9D9K+q8sFaBDmShe6bm4lzOaXnj69ttx9pMQfRwFe4=
+			</data>
+		</dict>
 		<key>Resources/leave.pcm</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			Ts+5QfnGvdUTX+SAz93PniuW2+c=
+			IOnRKaZn+yKcwYKAEAB61n5GdDQ=
 			</data>
 			<key>hash2</key>
 			<data>
-			akAWI8JYPmeGgTHyGU6rMyHnR4M4jYDe/cGQAiAYtvc=
+			GT7f9NLUmXUcthgGl+rnSlcXC+zP3v6x3eidry38sPA=
+			</data>
+		</dict>
+		<key>Resources/meeting_chat_chime.pcm</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			I4kPvB9mwQYcYLgodllWbGmyl9E=
+			</data>
+			<key>hash2</key>
+			<data>
+			8v9dc+4qiRNQlOy1Flsw41G7JO5O7ulVCPMR7s3JgR8=
+			</data>
+		</dict>
+		<key>Resources/meeting_raisehand_chime.pcm</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			S1XH4lezKBuyAKDArRoj8Lon2eo=
+			</data>
+			<key>hash2</key>
+			<data>
+			MDEqZSRgZV+FptrzcogjZos4CJsjpZmdel4uRMJqzys=
 			</data>
 		</dict>
 		<key>Resources/record_start.pcm</key>
@@ -469,11 +555,22 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			lc49ZlVeOOaOCExrciWq04rK98E=
+			SM9KAlE3FkEaTPpFW4dVkFUqOLo=
 			</data>
 			<key>hash2</key>
 			<data>
-			L2u+R5xyAHLOejQYI4m+yUqsgzEDJvMSyCby+Vwqbuo=
+			mh46lRQQz2JIBYNopnFz/Bp4M+EXpXZxPW8hpQEpZwk=
+			</data>
+		</dict>
+		<key>Resources/ring_pstn.wav</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			gEc6SNpNzg7ass1+snzcq/oQTjY=
+			</data>
+			<key>hash2</key>
+			<data>
+			/DwknCY3TzaUnS8CbN8sSATrja+Vc2Vm2bagc4vMl5c=
 			</data>
 		</dict>
 		<key>Resources/zcacert.pem</key>

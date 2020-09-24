@@ -67,11 +67,7 @@ ZNSDKError ZMeetingAudioWrap::UnMuteAudio(unsigned int userid)
     ZoomSDKMeetingActionController *action = [service getMeetingActionController];
     if (action) {
         ZoomSDKError ret(ZoomSDKError_UnKnow);
-        if (userid == 0) {
-            ret = [action actionMeetingWithCmd:ActionMeetingCmd_UnmuteAll userID:userid onScreen:ScreenType_First];
-        }else{
-            ret = [action actionMeetingWithCmd:ActionMeetingCmd_UnMuteAudio userID:userid onScreen:ScreenType_First];
-        }
+        ret = [action actionMeetingWithCmd:ActionMeetingCmd_UnMuteAudio userID:userid onScreen:ScreenType_First];
         nativeErrorTypeHelp  Help_type;
         return Help_type.ZoomSDKErrorType(ret);
     }
@@ -109,6 +105,19 @@ ZNSDKError ZMeetingAudioWrap::LeaveVoip()
     return ZNSDKERR_SERVICE_FAILED;
 }
 
+ZNSDKError ZMeetingAudioWrap::EnablePlayChimeWhenEnterOrExit(bool bEnable)
+{
+    ZoomSDKSettingService *setting = [[ZoomSDK sharedSDK] getSettingService];
+    if (setting) {
+        ZoomSDKGeneralSetting *general = [setting getGeneralSetting];
+        if (general) {
+            ZoomSDKError ret = [general enableMeetingSetting:bEnable SettingCmd:MeetingSettingCmd_EnablePlayChimeWhenEnterOrExit];
+            nativeErrorTypeHelp  Help_type;
+            return Help_type.ZoomSDKErrorType(ret);
+        }
+    }
+    return ZNSDKERR_SERVICE_FAILED;
+}
 
 //callback
 void ZMeetingAudioWrap::onUserAudioStatusChange(ZNList<ZNUserAudioStatus> lstAudioStatusChange, ZoomSTRING strAudioStatusList)

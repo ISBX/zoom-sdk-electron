@@ -31,6 +31,7 @@
     NSString*    _receiverName;
     NSString*    _content;
     time_t       _timestamp;
+    BOOL         _isChatToWaitingRoom;
 }
 /**
  * @brief Get the user ID of whom sending message.
@@ -62,6 +63,11 @@
  * @return If the function succeeds, the return value is the timestamps of the current message. 
  */
 - (time_t)getTimeStamp;
+/**
+ * @brief The current message is send to waiting room.
+ * @return If return YES means the message is send to waiting room,otherwise not.
+ */
+-(BOOL)isChatToWaitingRoom;
 @end
 /**
  * @brief ZOOM SDK audio information.
@@ -115,11 +121,6 @@
  */
 - (NSString*)getUserName;
 /**
- * @brief Get the email matched with the current user information.
- * @return The email.
- */
-- (NSString*)getEmail;
-/**
  * @brief Get the user ID matched with the current user information.
  * @return The user ID. 
  */
@@ -138,7 +139,17 @@
  * @brief Determine the audio status of the user specified by the current information.
  * @return YES means that the audio status is muted.
  */
-- (BOOL)isAudioMuted;
+- (BOOL)isAudioMuted NS_DEPRECATED_MAC(1.0, 4.6);
+/**
+ * @brief Get the audio status of user.
+ * @return The audio status of user.
+ */
+- (ZoomSDKAudioStatus)getAudioStatus;
+/**
+ * @brief Get the audio type of user.
+ * @return The audio type of user.
+ */
+- (ZoomSDKAudioType)getAudioType;
 /**
  * @brief Get the type of role of the user specified by the current information.
  * @return The role of the user.
@@ -159,6 +170,12 @@
  * @return The object of ZoomSDKWebinarAttendeeStatus.
  */
 - (ZoomSDKWebinarAttendeeStatus*)GetWebinarAttendeeStatus;
+
+/**
+ *@brief Get the user is talking.
+ *@return YES means that the user is talking.
+ */
+- (BOOL)isTalking;
 @end
 /**
  * @brief Join meeting helper.
@@ -270,8 +287,9 @@
 /**
  * @brief Notification of in-meeting active speaker changes.
  * @param userID The ID of new active speaker.
+ * @note This api is deprecated, you can use ‘- (void)onUserActiveAudioChanage:(NSArray *)useridArray’ instead.
  */
-- (void)onActiveSpeakerChanged:(unsigned int)userID;
+- (void)onActiveSpeakerChanged:(unsigned int)userID NS_DEPRECATED_MAC(4.1, 4.6);
 
 /**
  * @brief Notify user to confirm or cancel to switch to single share from multi-share.
@@ -293,12 +311,25 @@
  */
 - (void)onHostAskUnmute;
 
+/**
+ *@brief Notification of in-meeting active speakers.
+ *@param useridArray The array contain userid of the active speakers.
+ */
+- (void)onUserActiveAudioChanage:(NSArray *)useridArray;
+
+/**
+ *@brief Notification of user name chanaged.
+ *@param userid The user's user ID.
+ *@param userName The user screen name.
+ */
+-(void)onUserNameChanged:(unsigned int)userid  userName:(NSString *)userName;
+
 @end
 
 @interface ZoomSDKMeetingActionController : NSObject
 {
     id<ZoomSDKMeetingActionControllerDelegate> _delegate;
-    NSMutableArray*             _participantsArray;
+//    NSMutableArray*             _participantsArray;
 }
 @property(nonatomic, assign) id<ZoomSDKMeetingActionControllerDelegate> delegate;
 
@@ -464,4 +495,11 @@
  * @return YES means is showing sharing screen, NO means is showing video.
  */
 - (BOOL)isDisplayingShareViewOrVideo;
+
+/**
+ * @brief Set the meeting topic on meeting info.
+ * @param topic The meeting topic.
+ * @return  If the function succeeds, it will return ZoomSDKError_success, otherwise not.
+ */
+- (ZoomSDKError)setMeetingTopicOnMeetingInfo:(NSString *)topic;
 @end

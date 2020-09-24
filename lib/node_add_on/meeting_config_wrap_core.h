@@ -19,8 +19,6 @@ public:
 	void SetDirectShareMonitorID(ZoomSTRING monitorID);
 	void SetMeetingUIPos(ZNWndPosition position);
 	void DisableWaitingForHostDialog(bool bDisable);
-	void HideMeetingInfoFromMeetingUITitle(bool bHide);
-	void SetMeetingIDForMeetingUITitle(unsigned long long meetingNumber);
 	void DisablePopupMeetingWrongPSWDlg(bool bDisable);
 	void EnableAutoEndOtherMeetingWhenStartMeeting(bool bEnable);
 	void EnableLButtonDBClick4SwitchFullScreenMode(bool bEnable);
@@ -44,6 +42,7 @@ public:
 	void EnableDeclineRemoteControlResponseDlg(bool bEnable);
 	void EnableLeaveMeetingOptionForHost(bool bEnable);
 	void EnableVideoButtonOnMeetingUI(bool bEnable);
+	void EnableAudioButtonOnMeetingUI(bool bEnable);
 	void EnableEnterAndExitFullScreenButtonOnMeetingUI(bool bEnable);
 	void RedirectClickShareBTNEvent(bool bRedirect);
 	void RedirectClickEndMeetingBTNEvent(bool bRedirect);
@@ -51,6 +50,8 @@ public:
 	void RedirectClickCustomLiveStreamMenuEvent(bool bRedirect);
 	void RedirectClickParticipantListBTNEvent(bool bRedirect);
 	void RedirectClickCCBTNEvent(bool bRedirect);
+	void RedirectClickAudioBTNEvent(bool bRedirect);
+	void RedirectClickAudioMenuBTNEvent(bool bRedirect);
 	void RedirectMeetingWarningMsg(ZNZoomRedirectWarningMsgOption redirectOption);
 	void EnableToolTipsShow(bool bEnable);
 	void EnableAirplayInstructionWindow(bool bEnable);
@@ -61,7 +62,6 @@ public:
 	void SetShowAudioUseComputerSoundChkbox(bool bShow);
 	void SetShowCallInTab(bool bShow);
 	void SetShowCallMeTab(bool bShow);
-	void SetAlwaysShowMeetingIDOnTitle(bool bAlwaysShow);
 	void DisableTopMostAttr4SettingDialog(bool bDisable);
 	void EnableGrabShareWithoutReminder(bool bEnable);
 	void EnableShowShareSwitchMultiToSingleConfirmDlg(bool bEnable);
@@ -86,7 +86,21 @@ public:
 	void EnableForceAutoStartMyVideoWhenJoinMeeting(bool bEnable);
 	void EnableForceAutoStopMyVideoWhenJoinMeeting(bool bEnable);
 	void DisableAutoShowSelectJoinAudioDlgWhenJoinMeeting(bool bDisable);
+	void DisableShowJoinMeetingWnd(bool bDisable);
 	void DisableRemoteCtrlCopyPasteFeature(bool bDisable);
+	void DisableToolbarInviteButtonClickOriginAction(bool bDisable);
+
+	void SetShowVideoOptimizeChkbox(bool bShow);
+	ZNRequiredInfoType GetRequiredInfoType();
+	bool InputMeetingPasswordAndScreenName(ZoomSTRING meetingPassword, ZoomSTRING screenName);
+	bool InputMeetingIDAndScreenName(ZoomSTRING meetingID, ZoomSTRING screenName);
+	bool InputMeetingScreenName(ZoomSTRING screenName);
+	void MeetingPasswordAndScreenNameHandler_Cancel();// not a good name
+	ZNWebinarNeedRegisterType GetWebinarNeedRegisterType();
+	ZoomSTRING GetWebinarRegisterUrl();
+	void ReleaseRegisterWebinarByUrl();//not a good name
+	ZNSDKError InputWebinarRegisterEmailAndScreenName(ZoomSTRING email, ZoomSTRING screenName);
+	void CancelRegisterWebinarByEmail();
 
 	ZNFreeMeetingEndingReminderType GetReminderType();
 	ZNSDKError UpgradeMeeting();
@@ -98,6 +112,13 @@ public:
 	void onFreeMeetingUpgradeToGiftFreeTrialStart();
 	void onFreeMeetingUpgradeToGiftFreeTrialStop();
 	void onFreeMeetingUpgradeToProMeeting();
+
+	void onInputMeetingPasswordAndScreenNameNotification();
+	void onAirPlayInstructionWndNotification(bool bShow, ZoomSTRING airhostName);
+	void onWebinarNeedRegisterNotification();
+	void onEndOtherMeetingToJoinMeetingNotification();
+	void onFreeMeetingRemainTime(unsigned int leftTime);
+	void onFreeMeetingRemainTimeStopCountDown();
 
 private:
 	ZNativeSDKMeetingConfigWrapFreemeetingSink* m_pSink;

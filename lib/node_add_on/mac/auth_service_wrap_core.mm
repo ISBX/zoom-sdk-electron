@@ -47,6 +47,23 @@ ZNSDKError  ZAuthServiceWrap::AuthSDK(ZNAuthParam &authParam)
     return error.ZoomSDKErrorType(ret);
 }
 
+ZNSDKError ZAuthServiceWrap::AuthSDK(ZNAuthContext& authContext)
+{
+    NSString *jwtToken = [NSString stringWithCString:authContext.sdk_jwt_token.c_str() encoding:NSUTF8StringEncoding];
+    if (!jwtToken || jwtToken.length == 0) {
+        return ZNSDKERR_INVALID_PARAMETER;
+    }
+    ZoomSDKAuthService *auth = [[ZoomSDK sharedSDK] getAuthService];
+    if (!auth) {
+        return ZNSDKERR_SERVICE_FAILED;
+    }
+    ZoomSDKAuthContext *context = [[ZoomSDKAuthContext alloc] init];
+    context.jwtToken = jwtToken;
+    ZoomSDKError ret = [auth sdkAuth:context];
+    nativeErrorTypeHelp error;
+    return error.ZoomSDKErrorType(ret);
+}
+
 ZNSDKError ZAuthServiceWrap::Login(ZNLoginParam &loginParam)
 {
     NSString *userName = [NSString stringWithCString:loginParam.user_name.c_str() encoding:NSUTF8StringEncoding];
@@ -125,6 +142,11 @@ void ZAuthServiceWrap::onZoomIdentityExpired()
     }
 }
 
-
+void ZAuthServiceWrap::onZoomAuthIdentityExpired()
+{
+    if (m_pSink) {
+        m_pSink->onZoomAuthIdentityExpired();
+    }
+}
 
 

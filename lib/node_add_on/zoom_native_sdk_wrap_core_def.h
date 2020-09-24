@@ -55,6 +55,7 @@ enum ZNSDK_LANGUAGE_ID
 	ZNLANGUAGE_French,///<In French.
 	ZNLANGUAGE_Portuguese,///<In Portuguese.
 	ZNLANGUAGE_Russian,///<In Russian.
+	ZNLANGUAGE_Korean,///<In Korean.
 };
 
 enum ZNAuthResult
@@ -112,11 +113,15 @@ typedef struct _ZNInitParam
 	ZoomSTRING strSupportUrl;///<Support URL.
 	ZoomSTRING strBrandingName;///<Branding name.
 	ZNConfigurableOptions obConfigOpts;///<The configuration options of the SDK.
+	unsigned int logFileSize; ///<Size of a log file in M(megabyte). The default size is 5M. There are 5 log files in total and the file size varies from 1M to 50M.
+	bool enableGeneratDump; ///<Enable generate dump file if the app crashed.
 	ZNSDK_APP_Locale locale;
 	_ZNInitParam(){
 		enable_log = true;
-		langid = ZNLANGUAGE_English;
+		langid = ZNLANGUAGE_Unknow;
 		locale = ZNSDK_APP_Locale_Default;
+		logFileSize = 5;
+		enableGeneratDump = false;
 	}
 }ZNInitParam;
 
@@ -125,6 +130,11 @@ typedef struct _ZNAuthParam
 	ZoomSTRING sdk_key;///<APP Key string.
 	ZoomSTRING sdk_secret;///<APP Secret string.
 }ZNAuthParam;
+
+typedef struct _ZNAuthContext
+{
+	ZoomSTRING sdk_jwt_token;///<Jwt token.
+}ZNAuthContext;
 
 typedef struct _ZNLoginParam
 {
@@ -225,7 +235,6 @@ enum ZNMeetingStatus
 };
 enum ZNSDKUserType
 {
-	ZNSDK_UT_APIUSER = 99,///<API user type, quits later.
 	ZNSDK_UT_NORMALUSER = 100,///<Type of ordinary user who needs to login.
 	ZNSDK_UT_WITHOUT_LOGIN,///<Start meeting without login.
 };
@@ -245,7 +254,6 @@ typedef struct _ZNStartParam
 	ZoomSTRING hDirectShareAppWnd;///<The window handle of the direct sharing application.
 	ZoomSTRING participantId;///<The ID of attendees. The SDK will set this value when the associated settings are turned on.
 	ZoomSTRING userId;///<User ID.
-	ZoomSTRING userToken;///<User token
 	ZoomSTRING username;///<Username when logged in.
 	ZoomSTRING sdkVanityID;///<Meeting vanity ID.
 	ZoomSTRING userZAK;///<ZOOM access token.
@@ -254,7 +262,7 @@ typedef struct _ZNStartParam
 	bool isAudioOff;///<Turn off the audio or not. True indicates to turn off. In addition, this flag is affected by meeting attributes.
 	bool isDirectShareDesktop;///<Share the desktop directly or not. True indicates to share.
 	_ZNStartParam() {
-		userType = ZNSDK_UT_APIUSER;
+		userType = ZNSDK_UT_WITHOUT_LOGIN;
 	}
 }ZNStartParam;
 typedef struct _ZNJoinParam
@@ -264,18 +272,17 @@ typedef struct _ZNJoinParam
 	ZoomSTRING hDirectShareAppWnd;///<The window handle of the direct sharing application.
 	ZoomSTRING participantId;///<The ID of attendees. The SDK will set this value when the associated settings are turned on.
 	ZoomSTRING userId;///<User ID.
-	ZoomSTRING userToken;///<User token
 	ZoomSTRING username;///<Username when logged in.
 	ZoomSTRING psw;///<Meeting password.
 	ZoomSTRING vanityID;///<Meeting vanity ID.
 	ZoomSTRING webinarToken;///<Webinar token.
-	ZoomSTRING token4EnforceLogin;///<Use the token if the meeting requests to login.
+	ZoomSTRING userZAK;///<ZOOM access token.
 	ZoomSTRING displayID;
 	bool isVideoOff;///<Turn off the video or not. True indicates to turn off. In addition, this flag is affected by meeting attributes.
 	bool isAudioOff;///<Turn off the audio or not. True indicates to turn off. In addition, this flag is affected by meeting attributes.
 	bool isDirectShareDesktop;///<Share the desktop directly or not. True indicates to share.
 	_ZNJoinParam() {
-		userType = ZNSDK_UT_APIUSER;
+		userType = ZNSDK_UT_WITHOUT_LOGIN;
 	}
 }ZNJoinParam;
 enum ZNLeaveMeetingCmd
@@ -482,6 +489,8 @@ enum ZNH323CalloutStatus
 	ZN_H323Callout_Ring,   ///<Bell during the call.
 	ZN_H323Callout_Timeout, ///<Call timeout.
 	ZN_H323Callout_Failed, ///<Call fails.
+	ZN_H323Callout_Busy,	///<Busy
+	ZN_H323Callout_Decline, ///<Decline
 };
 enum ZNH323DeviceType
 {
@@ -558,10 +567,15 @@ enum ZNUserRole
 	ZN_USERROLE_BREAKOUTROOM_MODERATOR,///<Host role in breakout room.
 	ZN_USERROLE_ATTENDEE,///<Role of attendee.
 };
+enum ZNSDKUserInfoType
+{
+	ZN_REAL_USERINFO,
+	ZN_FAKE_USERINFO,
+};
 typedef struct _ZNUserInfomation
 {
 	ZoomSTRING userName;///<Current user name.
-	ZoomSTRING email;///<Current user email.
+	//ZoomSTRING email;///<Current user email.
 	bool isHost; ///<Whether the member corresponding with the current information is the host or not.
 	unsigned int userID;///<Current user's ID.
 	bool isVideoOn;///<The video status of the user specified by the current information.
@@ -570,6 +584,7 @@ typedef struct _ZNUserInfomation
 	ZNUserRole userRole;///<The type of role of the user specified by the current information. For more infomation, see \link ZNUserRole \endlink enum.
 	bool isPurePhoneUser;///<Whether the user corresponding to the current information joins the meeting by telephone or not.
 	bool webinarAttendeeStatus;///<The webinar status of the user specified by the current information. TRUE indicates that it is able to talk.
+	ZNSDKUserInfoType userInfoType;
 #if (defined BUILD_WIN)
 	ZNAudioType audioJoinType;///<the audio type of the user specified by the current information when joins the meeting. For more infomation, see \link ZNAudioType \endlink enum.
 	bool isInWaitingRoom;///<Whether the user specified by the current information is in the waiting room or not.
@@ -577,6 +592,10 @@ typedef struct _ZNUserInfomation
 	ZoomSTRING AudioVoiceLevel;///<The Mic level of the user corresponding to the current information.
 	bool isClosedCaptionSender;///<Whether the user corresponding to the current information is the sender of Closed Caption or not.
 #endif
+	_ZNUserInfomation()
+	{
+		userInfoType = ZN_FAKE_USERINFO;
+	}
 }ZNUserInfomation;
 
 /*! \enum SDKMinimizeUIMode
@@ -669,6 +688,128 @@ typedef struct _ZNZoomRedirectWarningMsgOption
 #define SETTING_DLG_SHOW_AUDIO_TABPAGE (1UL << 6)
 #define SETTING_DLG_SHOW_ADVANCED_FEATURE_TABPAGE (1UL << 7)
 #define SETTING_DLG_SHOW_ACCESSIBILITY_TABPAGE (1UL << 8)
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/*! \enum ZNSettingsNetWorkType
+\brief Notify network type.
+Here are more detailed structural descriptions.
+*/
+enum ZNSettingsNetWorkType
+{
+	ZNSETTINGS_NETWORK_WIRED = 0,///<Wired LAN
+	ZNSETTINGS_NETWORK_WIFI = 1,///<WIFI
+	ZNSETTINGS_NETWORK_PPP = 2,///<PPP
+	ZNSETTINGS_NETWORK_3G = 3,///<3G
+	ZNSETTINGS_NETWORK_OTHERS = 4,///<Others
+
+	ZNSETTINGS_NETWORK_UNKNOWN = -1,///<Unknown network.
+};
+/*! \enum ZNSettingConnectionType
+\brief Notify connection type.
+Here are more detailed structural descriptions.
+*/
+enum ZNSettingConnectionType
+{
+	ZNSETTINGS_CONNECTION_TYPE_CLOUD,///<Cloud connection.
+	ZNSETTINGS_CONNECTION_TYPE_DIRECT,///<Direct connection.
+	ZNSETTINGS_CONNECTION_TYPE_UNKNOWN = -1,///<Unknown connection.
+};
+/*! \struct ZNOverallStatisticInfo
+\brief Notify overall statistic information.
+Here are more detailed structural descriptions.
+*/
+typedef struct _ZNOverallStatisticInfo
+{
+	ZNSettingsNetWorkType net_work_type;///<Network type.
+	ZNSettingConnectionType connection_type;///<Connection type
+	ZoomSTRING proxy_addr;///<Proxy address.
+	_ZNOverallStatisticInfo()
+	{
+		net_work_type = ZNSETTINGS_NETWORK_UNKNOWN;
+		connection_type = ZNSETTINGS_CONNECTION_TYPE_UNKNOWN;
+	}
+}ZNOverallStatisticInfo;
+/*! \struct ZNAudioSessionStatisticInfo
+\brief Notify the audio status information.
+Here are more detailed structural descriptions.
+*/
+typedef struct _ZNAudioSessionStatisticInfo
+{
+	int frequency_send;///<Sending frequency, unit: KHz.
+	int frequency_recv;///<Receiving frequency, unit: KHz.
+	int latency_send;///<Sending latency, unit: ms.
+	int latency_recv;///<Receiving latency, unit: ms.
+	int jitter_send;///<Sending jitter, unit: ms.
+	int jitter_recv;///<Receiving jitter, unit: ms.
+	float packetloss_send;///<Sending packet loss, unit: %.
+	float packetloss_recv;///<Receiving packet loss, unit: %.
+
+}ZNAudioSessionStatisticInfo;
+/*! \struct ZNASVSessionStatisticInfo
+\brief Notify video status information.
+Here are more detailed structural descriptions.
+*/
+typedef struct ZNASVSessionStatisticInfo
+{
+	int latency_send;///<Sending latency, unit: ms.
+	int latency_recv;///<Receiving latency, unit: ms.
+	int jitter_send;///<Sending jitter, unit: ms.
+	int jitter_recv;///<Receiving jitter, unit: ms.
+	float packetloss_send_max;///<Sending max packet loss, unit: %.
+	float packetloss_recv_max;///<Receiving max packet loss, unit: %.
+	float packetloss_send_avg;///<Sending average packet loss, unit: %.
+	float packetloss_recv_avg;///<Receiving average packet loss, unit: %.
+	int resolution_send;///<HIWORD->height, LOWORD->width.
+	int resolution_recv;///<HIWORD->height, LOWORD->width. 
+	int fps_send;///<Frame per second sending.
+	int fps_recv;///<Frame per second receiving.
+
+}ZNASVSessionStatisticInfo;
+
+enum ZNRequiredInfoType
+{
+	ZNREQUIRED_INFO_TYPE_NONE,///<Initialization.
+	ZNREQUIRED_INFO_TYPE_Password, ///<The user needs to enter the password when joins the meeting. Via the InputMeetingPasswordAndScreenName() to specify the password information.
+	ZNREQUIRED_INFO_TYPE_Password4WrongPassword,///<If the password is invalid, the user needs to re-enter it. Via the InputMeetingPasswordAndScreenName() to specify the password information. 
+	ZNREQUIRED_INFO_TYPE_PasswordAndScreenName,///<The user needs to enter the screen name and the password,via the InputMeetingPasswordAndScreenName() to specify the necessary information.
+	ZNREQUIRED_INFO_TYPE_ScreenName,///<The user needs to enter the screen name. Via the InputMeetingScreenName() to specify the screen name information.
+	ZNREQUIRED_INFO_TYPE_MeetingIDAndScreenName,///<The user needs to enter the screen name and the meeting id,via the InputMeetingMeetingIDAndScreenName() to specify the necessary information.
+};
+/*! \enum WebinarNeedRegisterType
+\brief Register type of webinar.
+Here are more detailed structural descriptions.
+*/
+enum ZNWebinarNeedRegisterType
+{
+	ZNWebinarReg_NONE,///<Initialization.
+	ZNWebinarReg_By_Register_Url,///<Register webinar account by URL.
+	ZNWebinarReg_By_Email_and_DisplayName,///<Register webinar account by email and the screen name.
+};
+
+enum ZNAudioCallbackActionInfo
+{
+	ZNACTION_INFO_NONE = 0,
+	ZNACTION_INFO_CHOOSE_AUDIO_DEVICE_NOAUDIODEVICECONNECTTED,
+	ZNACTION_INFO_CHOOSE_AUDIO_DEVICE_COMPUTERAUDIODEVICEERROR,
+	ZNACTION_INFO_CHOOSE_AUDIO_DEVICE_PHONECALLDEVICEERROR,
+	ZNACTION_INFO_NEED_JOIN_VOIP,
+	ZNACTION_INFO_MUTE_UNMUTE_AUDIO,
+	ZNACTION_INFO_SHOW_AUDIO_SETTING_WINDOW,
+};
+
+typedef struct tagZNAudioBtnClickedCallbackInfo
+{
+	unsigned int userid_MuteUnmute;
+	ZNAudioCallbackActionInfo audio_clicked_action;
+	tagZNAudioBtnClickedCallbackInfo()
+	{
+		userid_MuteUnmute = 0;
+		audio_clicked_action = ZNACTION_INFO_NONE;
+	}
+
+}ZNAudioBtnClickedCallbackInfo;
+
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 #define ZNList std::vector

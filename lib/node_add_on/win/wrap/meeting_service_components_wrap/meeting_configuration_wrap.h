@@ -25,10 +25,6 @@ DEFINE_FUNC_1(SetDirectShareMonitorID, void, const wchar_t*, monitorID)
 DEFINE_FUNC_1(SetMeetingUIPos, void, WndPosition, pos)
 //virtual void DisableWaitingForHostDialog(bool bDisable) = 0;
 DEFINE_FUNC_1(DisableWaitingForHostDialog, void, bool, bDisable)
-//virtual void HideMeetingInfoFromMeetingUITitle(bool bHide) = 0;
-DEFINE_FUNC_1(HideMeetingInfoFromMeetingUITitle, void, bool, bHide)
-//virtual void SetMeetingIDForMeetingUITitle(UINT64 meetingNumber) = 0;
-DEFINE_FUNC_1(SetMeetingIDForMeetingUITitle, void, UINT64, meetingNumber)
 //virtual void DisablePopupMeetingWrongPSWDlg(bool bDisable) = 0;
 DEFINE_FUNC_1(DisablePopupMeetingWrongPSWDlg, void, bool, bDisable)
 //virtual void EnableAutoEndOtherMeetingWhenStartMeeting(bool bEnable) = 0;
@@ -47,6 +43,8 @@ DEFINE_FUNC_1(EnableLeaveMeetingOptionForHost, void, bool, bEnable)
 DEFINE_FUNC_1(EnableInviteButtonOnMeetingUI, void, bool, bEnable)
 //virtual void EnableVideoButtonOnMeetingUI(bool bEnable) = 0;
 DEFINE_FUNC_1(EnableVideoButtonOnMeetingUI, void, bool, bEnable)
+//virtual void EnableAudioButtonOnMeetingUI(bool bEnable) = 0;
+DEFINE_FUNC_1(EnableAudioButtonOnMeetingUI, void, bool, bEnable)
 //virtual void EnableInputMeetingPasswordDlg(bool bEnable) = 0;
 DEFINE_FUNC_1(EnableInputMeetingPasswordDlg, void, bool, bEnable)
 //virtual void EnableEnterAndExitFullScreenButtonOnMeetingUI(bool bEnable) = 0;
@@ -99,11 +97,12 @@ DEFINE_FUNC_1(SetShowCallInTab, void, bool, bShow)
 DEFINE_FUNC_1(SetShowCallMeTab, void, bool, bShow)
 //virtual void ForceDisableMultiShare(bool bDisable) = 0;
 DEFINE_FUNC_1(ForceDisableMultiShare, void, bool, bDisable)
-//virtual void SetAlwaysShowMeetingIDOnTitle(bool bAlwaysShow) = 0;
-DEFINE_FUNC_1(SetAlwaysShowMeetingIDOnTitle, void, bool, bAlwaysShow)
 //virtual void RedirectClickCustomLiveStreamMenuEvent(bool bRedirect) = 0;
 DEFINE_FUNC_1(RedirectClickCustomLiveStreamMenuEvent, void, bool, bRedirect)
-
+//virtual void RedirectClickAudioBTNEvent(bool bRedirect) = 0;
+DEFINE_FUNC_1(RedirectClickAudioBTNEvent, void, bool, bRedirect)
+//virtual void RedirectClickAudioMenuBTNEvent(bool bRedirect) = 0;
+DEFINE_FUNC_1(RedirectClickAudioMenuBTNEvent, void, bool, bRedirect)
 //virtual void RedirectClickCCBTNEvent(bool bRedirect) = 0;
 DEFINE_FUNC_1(RedirectClickCCBTNEvent, void, bool, bRedirect)
 //virtual SDKError SetUICustomizedString(SDKCustomizedStringType customizedType, const wchar_t* customizedString) = 0;
@@ -139,6 +138,8 @@ DEFINE_FUNC_1(EnableForceAutoStartMyVideoWhenJoinMeeting, void, bool, bEnable)
 DEFINE_FUNC_1(EnableForceAutoStopMyVideoWhenJoinMeeting, void, bool, bEnable)
 //virtual void DisableAutoShowSelectJoinAudioDlgWhenJoinMeeting(bool bDisable) = 0;
 DEFINE_FUNC_1(DisableAutoShowSelectJoinAudioDlgWhenJoinMeeting, void, bool, bDisable)
+//virtual void DisableShowJoinMeetingWnd(bool bDisable) = 0;
+DEFINE_FUNC_1(DisableShowJoinMeetingWnd, void, bool, bDisable)
 //virtual void RedirectMeetingWarningMsg(RedirectWarningMsgOption redirectOption) = 0;
 DEFINE_FUNC_1(RedirectMeetingWarningMsg, void, RedirectWarningMsgOption, redirectOption)
 //virtual void HideUpgradeWarningMsgForFreeUserWhenSchedule(bool bHide) = 0;
@@ -159,6 +160,16 @@ DEFINE_FUNC_1(HideRemoteControlOnMeetingUI, void, bool, bHide)
 DEFINE_FUNC_1(HideQAOnMeetingUI, void, bool, bHide)
 //virtual void HidePollOnMeetingUI(bool bHide) = 0;
 DEFINE_FUNC_1(HidePollOnMeetingUI, void, bool, bHide)
+//virtual void HideReactionsOnMeetingUI(bool bHide) = 0;
+DEFINE_FUNC_1(HideReactionsOnMeetingUI, void, bool, bHide)
+//virtual void HideMeetingInfoOnMeetingUI(bool bHide) = 0;
+DEFINE_FUNC_1(HideMeetingInfoOnMeetingUI, void, bool, bHide)
+//virtual void HideShareButtonOnMeetingUI(bool bHide) = 0;
+DEFINE_FUNC_1(HideShareButtonOnMeetingUI, void, bool, bHide)
+//virtual void DisablePanelistMenuItem(PanelistMenuItemOption menuOption) = 0;
+DEFINE_FUNC_1(DisablePanelistMenuItem, void, PanelistMenuItemOption, menuOption)
+//virtual void DisableAttendeeMenuItem(AttendeeMenuItemOption menuOption) = 0;
+DEFINE_FUNC_1(DisableAttendeeMenuItem, void, AttendeeMenuItemOption, menuOption)
 
 //virtual void SetMaxDurationForOnlyHostInMeeting(int nDuration) = 0;
 DEFINE_FUNC_1(SetMaxDurationForOnlyHostInMeeting, void, int, nDuration)

@@ -44,4 +44,6 @@
 #import "NSTextView+ZoomKit.h"
 #import "NSScrollView+ZoomKit.h"
 #import "AVCaptureDevice+ZoomKit.h"
+#import "NSMenuItem+ZoomKit.h"
+#import "NSWorkspace+ZoomKit.h"
 #endif /* Header_h */

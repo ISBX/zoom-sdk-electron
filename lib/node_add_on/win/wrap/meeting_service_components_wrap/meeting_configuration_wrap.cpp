@@ -30,8 +30,6 @@ IMPL_FUNC_NORET_1(IMeetingConfiguration,SetBottomFloatToolbarWndVisibility, void
 IMPL_FUNC_NORET_1(IMeetingConfiguration,SetDirectShareMonitorID, void, const wchar_t*, monitorID)
 IMPL_FUNC_NORET_1(IMeetingConfiguration,SetMeetingUIPos, void, WndPosition, pos)
 IMPL_FUNC_NORET_1(IMeetingConfiguration,DisableWaitingForHostDialog, void, bool, bDisable)
-IMPL_FUNC_NORET_1(IMeetingConfiguration,HideMeetingInfoFromMeetingUITitle, void, bool, bHide)
-IMPL_FUNC_NORET_1(IMeetingConfiguration,SetMeetingIDForMeetingUITitle, void, UINT64, meetingNumber)
 IMPL_FUNC_NORET_1(IMeetingConfiguration,DisablePopupMeetingWrongPSWDlg, void, bool, bDisable)
 IMPL_FUNC_NORET_1(IMeetingConfiguration,EnableAutoEndOtherMeetingWhenStartMeeting, void, bool, bEnable)
 IMPL_FUNC_NORET_1(IMeetingConfiguration,EnableAutoAdjustSpeakerVolumeWhenJoinAudio, void, bool, bEnable)
@@ -41,6 +39,7 @@ IMPL_FUNC_NORET_1(IMeetingConfiguration,EnableDeclineRemoteControlResponseDlg, v
 IMPL_FUNC_NORET_1(IMeetingConfiguration,EnableLeaveMeetingOptionForHost, void, bool, bEnable)
 IMPL_FUNC_NORET_1(IMeetingConfiguration,EnableInviteButtonOnMeetingUI, void, bool, bEnable)
 IMPL_FUNC_NORET_1(IMeetingConfiguration,EnableVideoButtonOnMeetingUI, void, bool, bEnable)
+IMPL_FUNC_NORET_1(IMeetingConfiguration,EnableAudioButtonOnMeetingUI, void, bool, bEnable)
 IMPL_FUNC_NORET_1(IMeetingConfiguration,EnableInputMeetingPasswordDlg, void, bool, bEnable)
 IMPL_FUNC_NORET_1(IMeetingConfiguration,EnableEnterAndExitFullScreenButtonOnMeetingUI, void, bool, bEnable)
 IMPL_FUNC_NORET_1(IMeetingConfiguration,EnableLButtonDBClick4SwitchFullScreenMode, void, bool, bEnable)
@@ -60,6 +59,16 @@ IMPL_FUNC_NORET_1(IMeetingConfiguration, HideRemoteControlOnMeetingUI, void, boo
 IMPL_FUNC_NORET_1(IMeetingConfiguration, HideQAOnMeetingUI, void, bool, bHide)
 IMPL_FUNC_NORET_1(IMeetingConfiguration, HidePollOnMeetingUI, void, bool, bHide)
 
+//virtual void HideReactionsOnMeetingUI(bool bHide) = 0;
+IMPL_FUNC_NORET_1(IMeetingConfiguration, HideReactionsOnMeetingUI, void, bool, bHide)
+//virtual void HideMeetingInfoOnMeetingUI(bool bHide) = 0;
+IMPL_FUNC_NORET_1(IMeetingConfiguration, HideMeetingInfoOnMeetingUI, void, bool, bHide)
+//virtual void HideShareButtonOnMeetingUI(bool bHide) = 0;
+IMPL_FUNC_NORET_1(IMeetingConfiguration, HideShareButtonOnMeetingUI, void, bool, bHide)
+//virtual void DisablePanelistMenuItem(PanelistMenuItemOption menuOption) = 0;
+IMPL_FUNC_NORET_1(IMeetingConfiguration, DisablePanelistMenuItem, void, PanelistMenuItemOption, menuOption)
+//virtual void DisableAttendeeMenuItem(AttendeeMenuItemOption menuOption) = 0;
+IMPL_FUNC_NORET_1(IMeetingConfiguration, DisableAttendeeMenuItem, void, AttendeeMenuItemOption, menuOption)
 
 //virtual void ConfigDSCP(int dscpAudio, int dscpVideo, bool bReset) = 0;
 IMPL_FUNC_NORET_3(IMeetingConfiguration,ConfigDSCP, void, int, dscpAudio, int, dscpVideo, bool, bReset)
@@ -95,11 +104,12 @@ IMPL_FUNC_NORET_1(IMeetingConfiguration, SetShowCallInTab, void, bool, bShow)
 IMPL_FUNC_NORET_1(IMeetingConfiguration, SetShowCallMeTab, void, bool, bShow)
 //virtual void ForceDisableMultiShare(bool bDisable) = 0;
 IMPL_FUNC_NORET_1(IMeetingConfiguration, ForceDisableMultiShare, void, bool, bDisable)
-//virtual void SetAlwaysShowMeetingIDOnTitle(bool bAlwaysShow) = 0;
-IMPL_FUNC_NORET_1(IMeetingConfiguration, SetAlwaysShowMeetingIDOnTitle, void, bool, bAlwaysShow)
 //virtual void RedirectClickCustomLiveStreamMenuEvent(bool bRedirect) = 0;
 IMPL_FUNC_NORET_1(IMeetingConfiguration, RedirectClickCustomLiveStreamMenuEvent, void, bool, bRedirect)
-
+//virtual void RedirectClickAudioBTNEvent(bool bRedirect) = 0;
+IMPL_FUNC_NORET_1(IMeetingConfiguration, RedirectClickAudioBTNEvent, void, bool, bRedirect)
+//virtual void RedirectClickAudioMenuBTNEvent(bool bRedirect) = 0;
+IMPL_FUNC_NORET_1(IMeetingConfiguration, RedirectClickAudioMenuBTNEvent, void, bool, bRedirect)
 //virtual void RedirectClickCCBTNEvent(bool bRedirect) = 0;
 IMPL_FUNC_NORET_1(IMeetingConfiguration, RedirectClickCCBTNEvent, void, bool, bRedirect)
 //virtual SDKError SetUICustomizedString(SDKCustomizedStringType customizedType, const wchar_t* customizedString) = 0;
@@ -141,6 +151,8 @@ IMPL_FUNC_NORET_1(IMeetingConfiguration, EnableForceAutoStartMyVideoWhenJoinMeet
 IMPL_FUNC_NORET_1(IMeetingConfiguration, EnableForceAutoStopMyVideoWhenJoinMeeting, void, bool, bEnable)
 //virtual void DisableAutoShowSelectJoinAudioDlgWhenJoinMeeting(bool bDisable) = 0;
 IMPL_FUNC_NORET_1(IMeetingConfiguration, DisableAutoShowSelectJoinAudioDlgWhenJoinMeeting, void, bool, bDisable)
+//virtual void DisableShowJoinMeetingWnd(bool bDisable) = 0;
+IMPL_FUNC_NORET_1(IMeetingConfiguration, DisableShowJoinMeetingWnd, void, bool, bDisable)
 //virtual void SetMaxDurationForOnlyHostInMeeting(int nDuration) = 0;
 IMPL_FUNC_NORET_1(IMeetingConfiguration, SetMaxDurationForOnlyHostInMeeting, void, int, nDuration)
 

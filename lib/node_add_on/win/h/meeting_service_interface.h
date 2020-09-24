@@ -73,16 +73,20 @@ enum MeetingFailCode
 	CONF_FAIL_REMOVED_BY_HOST = 61, ///<Removed by the host. 
 };  
 
+/*! \enum MeetingEndReason
+    \brief Meeting end reason.
+    Here are more detailed structural descriptions.
+*/
 enum MeetingEndReason
 {
-	EndMeetingReason_None = 0,
-	EndMeetingReason_KickByHost = 1,
-	EndMeetingReason_EndByHost = 2,
-	EndMeetingReason_JBHTimeOut = 3,
-	EndMeetingReason_NoAttendee = 4,
-	EndMeetingReason_HostStartAnotherMeeting = 5,
-	EndMeetingReason_FreeMeetingTimeOut = 6,
-	EndMeetingReason_NetworkBroken,
+	EndMeetingReason_None = 0,///<For initialization.
+	EndMeetingReason_KickByHost = 1,///<Kicked by host.
+	EndMeetingReason_EndByHost = 2,///<Ended by host.
+	EndMeetingReason_JBHTimeOut = 3,///<JBH times out.
+	EndMeetingReason_NoAttendee = 4,///<No attendee.
+	EndMeetingReason_HostStartAnotherMeeting = 5,///<Host starts another meeting.
+	EndMeetingReason_FreeMeetingTimeOut = 6,///<Free meeting times out.
+	EndMeetingReason_NetworkBroken,///<Network is broken.
 };
 
 /*! \enum MeetingType
@@ -113,39 +117,30 @@ enum LeaveMeetingCmd
 */
 enum SDKUserType
 {
-	SDK_UT_APIUSER     = 99,///<API user type, quits later.
 	SDK_UT_NORMALUSER = 100,///<Type of ordinary user who needs to login.
 	SDK_UT_WITHOUT_LOGIN,///<Start meeting without login.
 };
 
-/*! \struct tagJoinParam4APIUser
-    \brief The parameter of API user when joins the meeting.
+/*! \struct tagJoinParam4WithoutLogin
+    \brief The parameters of non-login user when joins the meeting.
     Here are more detailed structural descriptions.
 */
-typedef struct tagJoinParam4APIUser
+typedef struct tagJoinParam4WithoutLogin
 {
 	UINT64		   meetingNumber;///< Meeting number.
 	const wchar_t* vanityID;///<Meeting vanity ID
 	const wchar_t* userName;///<Username when logged in the meeting.
 	const wchar_t* psw;///<Meeting password.
 	HWND		   hDirectShareAppWnd;///<The window handle of the direct Sharing application.
-	const wchar_t* toke4enfrocelogin;///<Use the token if the meeting requests to login.
+	const wchar_t* userZAK;///<ZOOM access token.
 	const wchar_t* participantId;///<The ID of attendees. The SDK will set this value when the associated settings are turned on.
 	const wchar_t* webinarToken;///<Webinar token.
 	bool		   isDirectShareDesktop;///<Share the desktop directly or not. True indicates to Share.
 	bool		   isVideoOff;///<Turn off the video of not. True indicates to turn off. In addition, this flag is affected by meeting attributes.
 	bool		   isAudioOff;///<Turn off the audio or not. True indicates to turn off. In addition, this flag is affected by meeting attributes.
-}JoinParam4APIUser;
-
-/*! \struct tagJoinParam4WithoutLogin
-    \brief The parameters of non-login user when joins the meeting.
-    Here are more detailed structural descriptions.
-*/
-typedef struct tagJoinParam4WithoutLogin : public tagJoinParam4APIUser
-{
 }JoinParam4WithoutLogin;
 
-/*! \struct tagJoinParam4APIUser
+/*! \struct tagJoinParam4NormalUser
     \brief The parameter of ordinary logged-in user.
     Here are more detailed structural descriptions.
 */
@@ -172,34 +167,15 @@ typedef struct tagJoinParam
 	SDKUserType userType;///<User type. For more details, see \link SDKUserType \endlink enum.
 	union 
 	{
-		JoinParam4APIUser apiuserJoin;///<The parameter of API user when joins the meeting.
 		JoinParam4NormalUser normaluserJoin;///<The parameter of ordinary user when joins the meeting.
 		JoinParam4WithoutLogin withoutloginuserJoin;///<The parameters of unlogged-in user when joins the meeting.
 	} param;    
 	tagJoinParam()
 	{
-		userType = SDK_UT_APIUSER;
+		userType = SDK_UT_WITHOUT_LOGIN;
 		memset(&param, 0, sizeof(param));
 	}
 }JoinParam;
-
-/*! \struct tagStartParam4APIUser
-    \brief The parameter used by API user when starts the meeting.
-    Here are more detailed structural descriptions.
-*/
-typedef struct tagStartParam4APIUser
-{
-	const wchar_t* userID;///<User ID.
-	const wchar_t* userToken;///<User token
-	const wchar_t* userName;///<Username when logged in.
-	UINT64		   meetingNumber;///<Meeting number.
-	const wchar_t* vanityID;///<Meeting vanity ID.
-	HWND		   hDirectShareAppWnd;///<The window handle of the direct sharing application.
-	const wchar_t* participantId;///<The ID of attendees. The SDK will set this value when the associated settings are turned on.
-	bool		   isDirectShareDesktop;///<Share the desktop directly or not. True indicates to Share.
-	bool		   isVideoOff;///<Turn off the video or not. True indicates to turn off. In addition, this flag is affected by meeting attributes.
-	bool		   isAudioOff;///<Turn off the audio or not. True indicates to turn off. In addition, this flag is affected by meeting attributes.
-}StartParam4APIUser;
 
 
 /*! \enum ZoomUserType
@@ -223,7 +199,6 @@ enum ZoomUserType
 typedef struct tagStartParam4WithoutLogin
 {
 	const wchar_t* userID;///<User ID.
-	const wchar_t* userToken;///<User token.
 	const wchar_t* userZAK;///<ZOOM access token.
 	const wchar_t* userName;///<Username when logged in the meeting.
 	ZoomUserType   zoomuserType;///<User type.
@@ -261,13 +236,12 @@ typedef struct tagStartParam
 	SDKUserType userType;///<User type.
 	union 
 	{
-		StartParam4APIUser apiuserStart;///<The parameter for API user when starts the meeting.
 		StartParam4NormalUser normaluserStart;///<The parameter for ordinary user when starts the meeting.
-	StartParam4WithoutLogin withoutloginStart;///<The parameter for unlogged-in user when starts the meeting. 
+		StartParam4WithoutLogin withoutloginStart;///<The parameter for unlogged-in user when starts the meeting. 
 	}param;    
 	tagStartParam()
 	{
-		userType = SDK_UT_APIUSER;
+		userType = SDK_UT_WITHOUT_LOGIN;
 		memset(&param, 0, sizeof(param));
 	}
 }StartParam;
@@ -452,9 +426,20 @@ enum StatisticsWarningType
 {
 	Statistics_Warning_None,///<No warning.
 	Statistics_Warning_Network_Quality_Bad,///<The network connection quality is bad.
-	Statistics_Warning_Busy_System,
+	Statistics_Warning_Busy_System,///<The system is busy.
 };
 
+/*! \enum OSSessionType
+    \brief OS session type.
+    Here are more detailed structural descriptions.
+*/
+enum OSSessionType
+{
+	OS_SessionType_NotHandle = 0,
+	OS_SessionType_Lock, ///<equals to WTS_SESSION_LOCK
+	OS_SessionType_Logoff,///<equals to WTS_SESSION_LOGOFF
+	OS_SessionType_Remote_DISCONNECT,///<equals to WTS_REMOTE_DISCONNECT
+};
 /// \brief Meeting service callback event.
 ///
 class IMeetingServiceEvent
@@ -501,6 +486,8 @@ class IMeetingWaitingRoomController;
 class IMeetingLiveStreamController;
 class IMeetingWebinarController;
 class IClosedCaptionController;
+class IMeetingQAController;
+class IMeetingBOController;
 /// \brief Meeting Service Interface
 ///
 class IMeetingService
@@ -512,6 +499,10 @@ public:
 	///Otherwise failed. To get extended error information, see \link SDKError \endlink enum.
 	virtual SDKError SetEvent(IMeetingServiceEvent* pEvent) = 0;
 
+	/// \brief Join meeting with web uri
+	/// \param protocol_action Specifies the web uri
+	/// \return If the function succeeds, the return value is SDKErr_Success.
+	///Otherwise failed. To get extended error information, see \link SDKError \endlink enum.
 	virtual SDKError HandleZoomWebUriProtocolAction(const wchar_t* protocol_action) = 0;
 
 	/// \brief Join the meeting.
@@ -645,6 +636,13 @@ public:
 	/// \return If the function succeeds, the return value is a pointer to IZoomRealNameAuthMeetingHelper. Otherwise returns NULL.
 	virtual IZoomRealNameAuthMeetingHelper* GetMeetingRealNameAuthController() = 0;
 
+	/// \brief Get the Q&A controller.
+	/// \return If the function succeeds, the return value is a pointer to IMeetingQAController. Otherwise returns NULL.
+	virtual IMeetingQAController* GetMeetingQAController() = 0;
+
+	/// \brief Get the Breakout Room controller.
+	/// \return If the function succeeds, the return value is a pointer to IMeetingBOController. Otherwise returns NULL.
+	virtual IMeetingBOController* GetMeetingBOController() = 0;
 };
 END_ZOOM_SDK_NAMESPACE
 #endif

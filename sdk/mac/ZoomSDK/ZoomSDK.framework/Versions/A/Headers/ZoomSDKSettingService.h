@@ -20,6 +20,8 @@ typedef enum{
     SettingComponent_StatisticsFeatureTab,
     SettingComponent_FeedbackFeatureTab,
     SettingComponent_AccessibilityFeatureTab,
+    SettingComponent_ScreenShareFeatureTab,
+    SettingComponent_ShortCutFeatureTab,
 }SettingComponent;
 
 typedef enum{
@@ -329,14 +331,6 @@ typedef enum{
 - (ZoomSDKError)enableStero:(BOOL)enable;
 
 /**
- * @brief Set to output original sound of mic in meeting.
- * @param enable YES means using original sound, No disabling.
- * @return If the function succeeds, it will return ZoomSDKError_success, otherwise failed.
- */
-- (ZoomSDKError)enableUseOriginalSound:(BOOL)enable NS_DEPRECATED_MAC(4.1, 4.3);
-
-
-/**
  * @brief Enable to join meeting with the audio of computer.
  * @param enable YES means enabled, NO disabled.
  * @return If the function succeeds, it will return ZoomSDKError_success, otherwise not.  
@@ -407,16 +401,6 @@ typedef enum{
  * @return YES means enabled, otherwise not. 
  */
 - (BOOL)isEnableStereoOn;
-/**
- * @brief Determine if the meeting supports user's original sound. 
- * @return YES means supported, otherwise not.  
- */
-- (BOOL)isSupportUseOriginalSound NS_DEPRECATED_MAC(4.1, 4.3);
-/**
- * @brief Determine if user's original sound is enabled.  
- * @return YES means enabled, otherwise not.
- */
-- (BOOL)isUseOriginalSoundOn NS_DEPRECATED_MAC(4.1, 4.3);
 /**
  * @brief Set whether to enable the feature that attendee can speak by pressing the Spacebar when he is muted.
  * @return YES means enabled, otherwise not.
@@ -809,8 +793,8 @@ typedef enum{
  *@brief  set the value of fps limit
  *@param value is a number of user to set
  */
-- (ZoomSDKError)setLimitFPSValue:(int)value;
-
+- (ZoomSDKError)setLimitFPSValue:(int)value  NS_DEPRECATED_MAC(4.4, 4.4);
+- (ZoomSDKError)setLimitedFPSValue:(ZoomSDKFPSValue)value;
 /**
  *@brief  Enable  to set limited fps
  *@return Return YES is enable otherwise is not
@@ -885,6 +869,124 @@ typedef enum{
 - (ZoomSDKVideoASStatisticsInfo*)getVideoASStatisticsInfo:(BOOL)isVideo;
 @end
 
+@interface ZoomSDKVirtualBGImageInfo: NSObject
+{
+    BOOL               _isSelected;
+    NSString*          _imageFilePath;
+    NSString*          _imageName;
+}
+/**
+ * @brief Determine if it is the selected virtual background image.
+ * @return YES means is the selected virtual background image, otherwise not.
+ */
+- (BOOL)isSelected;
+/**
+ * @brief Get file path of the virtual background image.
+ * @return If the function succeeds, it will return the image file path.
+ */
+- (NSString*)getImageFilePath;
+/**
+ * @brief Get image file name of the virtual background image.
+ * @return If the function succeeds, it will return the image file name.
+ */
+- (NSString*)getImageName;
+@end
+
+@protocol ZoomSDKVirtualBackgroundSettingDelegate <NSObject>
+@optional
+/**
+ * @brief Notify the default virtual background image have been downloaded from web.
+ */
+- (void)onVBImageDidDownloaded;
+
+/**
+ * @brief Notify the virtual background was updated with selected color.
+ * @param selectedColor The selected color.
+ */
+- (void)onGreenVBDidUpdateWithReplaceColor:(NSColor*)selectedColor;
+
+/**
+ * @brief Notify the selected virtual background image has been changed, user can get the new selected image through image list.
+ */
+- (void)onSelectedVBImageChanged;
+@end
+
+@interface ZoomSDKVirtualBackgroundSetting: NSObject
+{
+    ZoomSDKSettingTestVideoDeviceHelper* settingVideoTestHelper;
+    id<ZoomSDKVirtualBackgroundSettingDelegate>       _delegate;
+}
+@property(nonatomic, assign)id<ZoomSDKVirtualBackgroundSettingDelegate> delegate;
+/**
+ * @brief Get the object to video device test helper.
+ * @return If the function succeeds, it will return a ZoomSDKSettingTestVideoDeviceHelper object, otherwise failed, returns nil.
+ */
+- (ZoomSDKSettingTestVideoDeviceHelper*)getSettingVideoTestHelper;
+
+/**
+ * @brief Determine if support virtual background feature.
+ * @return YES means is support, otherwise not.
+ */
+- (BOOL)isSupportVirtualBG;
+
+/**
+ * @brief Determine if support smart virtual background feature.
+ * @return YES means is support, otherwise not.
+ */
+- (BOOL)isSupportSmartVirtualBG;
+
+/**
+ * @brief Determine if the using green screen option is enabled.
+ * @return YES means is enabled, otherwise not.
+ */
+- (BOOL)isUsingGreenScreenOn;
+
+/**
+ * @brief Enable or disable the using green screen option.
+ * @return If the function succeeds, it will return ZoomSDKError_Success.
+ */
+- (ZoomSDKError)setUsingGreenScreen:(BOOL)bUse;
+
+/**
+ * @brief Add virtual background image.
+ * @param filePath The file path of the image user want to add.
+ * @return If the function succeeds, it will return ZoomSDKError_Success.
+ */
+- (ZoomSDKError)addBGImage:(NSString*)filePath;
+
+/**
+ * @brief Remove virtual background image.
+ * @param bgImageInfo The object of ZoomSDKVirtualBGImageInfo user want to remove.
+ * @return If the function succeeds, it will return ZoomSDKError_Success, otherwise failed.
+ */
+- (ZoomSDKError)removeBGImage:(ZoomSDKVirtualBGImageInfo*)bgImageInfo;
+
+/**
+ * @brief Get the array of virtual background images.
+ * @return If the function succeeds, it will return the NSArray of image list, otherwise nil.
+ */
+- (NSArray*)getBGImageList;
+
+/**
+ * @brief Use the specify image as selected virtual background images.
+ * @return If the function succeeds, it will return ZoomSDKError_Success, otherwise failed.
+ */
+- (ZoomSDKError)useBGImage:(ZoomSDKVirtualBGImageInfo*)bgImage;
+
+/**
+ * @brief Get the selected replace color of virtual background images.
+ * @return If the function succeeds, it will return the color, otherwise nil.
+ */
+- (NSColor*)getVBReplaceColor;
+
+/**
+ * @brief Start selected replace color of virtual background images.
+ * @return If the function succeeds, it will return ZoomSDKError_Success, otherwise nil.
+ * @note The selected replace color will be notified from callback event '- (void)onSelectedVBImageChanged'.
+ */
+- (ZoomSDKError)startSelectReplaceVBColor;
+@end
+
 @interface ZoomSDKSettingService : NSObject
 {
     ZoomSDKAudioSetting* _audioSetting;
@@ -892,6 +994,7 @@ typedef enum{
     ZoomSDKRecordSetting* _recordSetting;
     ZoomSDKGeneralSetting* _generalSetting;
     ZoomSDKStatisticsSetting* _statisticsSetting;
+    ZoomSDKVirtualBackgroundSetting* _virtualBGSetting;
 }
 /**
  * @brief Get the object of audio settings.
@@ -922,6 +1025,12 @@ typedef enum{
  * @return If the function succeeds, it will return an object of ZoomSDKStatisticsSetting.
  */
 -(ZoomSDKStatisticsSetting*)getStatisticsSetting;
+
+/**
+ * @brief Get the object of virtual background settings.
+ * @return If the function succeeds, it will return an object of ZoomSDKVirtualBackgroundSetting.
+ */
+-(ZoomSDKVirtualBackgroundSetting*)getVirtualBGSetting;
 
 @end
 

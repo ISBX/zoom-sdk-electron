@@ -25,6 +25,7 @@ enum AuthResult
 	AUTHRET_NONE,///<Initial status.
 	AUTHRET_OVERTIME,///<Time out.
 	AUTHRET_NETWORKISSUE,///<Network issues.
+	AUTHRET_CLIENT_INCOMPATIBLE, ///Account does not support this SDK version
 };
 
 /*! \enum LOGINSTATUS
@@ -40,7 +41,7 @@ enum LOGINSTATUS
 };
 
 /*! \struct tagAuthParam
-    \brief SDK Authentication parameter.
+    \brief SDK Authentication parameter with sdk key/secret.
     Here are more detailed structural descriptions.
 */
 typedef struct tagAuthParam
@@ -53,6 +54,41 @@ typedef struct tagAuthParam
 		appSecret = NULL;
 	}
 }AuthParam;
+
+/*! \struct tagAuthContext
+    \brief SDK Authentication parameter with jwt token.
+    Here are more detailed structural descriptions.
+*/
+typedef struct tagAuthContext
+{
+	const wchar_t* jwt_token; /*!JWT token. You may generate your JWT token using the online tool https://jwt.io/. **It is highly recommended to generate your JWT token in your backend server.**
+								 JWT is generated with three core parts: Header, Payload, and Signature. When combined, these parts are separated by a period to form a token: `aaaaa.bbbbb.cccc`.
+								 Please follow this template to compose your payload for SDK initialization:
+							     ** Header
+							  	 {
+							  		"alg": "HS256",
+							  		"typ": "JWT"
+							  	 }
+							     ** Payload
+							   	 {
+							        "appKey": "string", // Your SDK key
+							        "iat": long, // access token issue timestamp
+									"exp": long, // access token expire time
+									"tokenExp": long // token expire time
+							     }
+							     ** Signature
+							     HMACSHA256(
+							  			base64UrlEncode(header) + "." +
+										base64UrlEncode(payload),
+										"Your SDK secret here"
+								)
+							  */
+	tagAuthContext()
+	{
+		jwt_token = NULL;
+	}
+
+}AuthContext;
 
 /*! \enum LoginType
 	\brief User login type.
@@ -141,6 +177,9 @@ public:
 
 	/// \brief Zoom identity has expired, please re-login or generate a new zoom access token via REST Api.
 	virtual void onZoomIdentityExpired() = 0;
+
+	/// \brief Zoom authentication identity will be expired in 10 minutes, please re-auth.
+	virtual void onZoomAuthIdentityExpired() = 0;
 };
 
 class IDirectShareServiceHelper;
@@ -162,6 +201,12 @@ public:
 	///Otherwise failed. To get extended error information, see \link SDKError \endlink enum.
 	virtual SDKError SDKAuth(AuthParam& authParam) = 0;
 
+	/// \brief SDK Authentication with jwt token.
+	/// \param authContext The parameter to be used for authentication SDK, see \link AuthContext \endlink structure. 
+	/// \return If the function succeeds, the return value is SDKErr_Success.
+	///Otherwise failed. To get extended error information, see \link SDKError \endlink enum.
+	virtual SDKError SDKAuth(AuthContext& authContext) = 0;
+
 	/// \brief Get authentication status.
 	/// \return The return value is authentication status. To get extended error information, see \link AuthResult \endlink enum.
 	virtual AuthResult GetAuthResult() = 0;
@@ -169,6 +214,13 @@ public:
 	/// \brief Get SDK identity.
 	/// \return The SDK identity.
 	virtual const wchar_t* GetSDKIdentity() = 0;
+
+	/// \brief Call the interface to determine whether email login is enabled.
+	/// \param [out]bEnabled, if bEnabled is true indicates email login is enabled, otherwise disabled.
+	/// \return If the function succeeds, the return value is SDKErr_Success.
+	///Otherwise failed. To get extended error information, see \link SDKError \endlink enum.
+	///You need to call this APIs after IAuthServiceEvent::onAuthenticationReturn(AuthResult ret) and ret is equal to AUTHRET_SUCCESS.
+	virtual SDKError IsEmailLoginEnabled(bool& bEnabled) = 0;
 
 	/// \brief Account login.
 	/// \param param For the parameter to be used for account login, see \link LoginParam \endlink structure. 

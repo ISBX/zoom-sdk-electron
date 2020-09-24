@@ -148,6 +148,21 @@ typedef enum
  * @note You should call the method before calling [[ZoomSDK sharedSDK]initSDK:NO/YES] in the App.
  */
 - (void)setAppLocale:(ZoomSDKLocale)locale;
+
+/**
+ * @brief Switch to the new domain of the App.
+ * @param newDomain The new domain user want to switch to.
+ * @return If the function succeeds, it will return ZoomSDKError_Success, otherwise failed.
+ */
+- (ZoomSDKError)switchDomain:(NSString*)newDomain force:(BOOL)force;
+
+/**
+ * @brief Set support dark model to the app.
+ * @param isSupport YES means support dark model,NO is not support.
+ * @note Support for Mac OS 10.14 and above
+ * @note Call Api firstly before you call [[ZoomSDK sharedSDK]initSDK:NO/YES] in the App.
+ */
+- (ZoomSDKError)setSupportDarkModel:(BOOL)isSupport;
 @end
 
 

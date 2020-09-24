@@ -1,9 +1,11 @@
 #include "../auth_service_wrap_core.h"
 #include "wrap/sdk_wrap.h"
 #include "zoom_native_to_wrap.h"
-
+#include "sdk_events_wrap_class.h"
+#include "../zoom_native_sdk_wrap_core.h"
 
 ZOOM_SDK_NAMESPACE::IAuthServiceWrap& g_auth_service_wrap = ZOOM_SDK_NAMESPACE::CSDKWrap::GetInst().GetAuthServiceWrap();
+
 extern ZOOM_SDK_NAMESPACE::IMeetingServiceWrap& g_meeting_service_wrap;
 
 class ZAuthServiceWrapEvent : public ZOOM_SDK_NAMESPACE::IAuthServiceEvent
@@ -55,23 +57,21 @@ private:
 	ZAuthServiceWrap* owner_;
 };
 
-static ZAuthServiceWrapEvent g_auth_event;
 ZAuthServiceWrap::ZAuthServiceWrap()
 {
-	g_auth_event.SetOwner(this);
+	SDKEventWrapMgr::GetInst().m_authServiceWrapEvent.SetOwner(this);
 	m_pSink = 0;
 }
 ZAuthServiceWrap::~ZAuthServiceWrap()
 {
 	Uninit();
 	m_pSink = 0;
-	g_auth_event.SetOwner(NULL);
+	SDKEventWrapMgr::GetInst().m_authServiceWrapEvent.SetOwner(NULL);
 }
 void ZAuthServiceWrap::Init()
 {
 	ZOOM_SDK_NAMESPACE::CSDKWrap::GetInst().GetAuthServiceWrap().Init_Wrap();
-	ZOOM_SDK_NAMESPACE::CSDKWrap::GetInst().GetAuthServiceWrap().SetEvent(&g_auth_event);
-	m_direct_share_helper.Init();
+	ZOOM_SDK_NAMESPACE::CSDKWrap::GetInst().GetAuthServiceWrap().SetEvent(&SDKEventWrapMgr::GetInst().m_authServiceWrapEvent);
 }
 void ZAuthServiceWrap::Uninit()
 {
@@ -85,6 +85,16 @@ ZNSDKError ZAuthServiceWrap::AuthSDK(ZNAuthParam& authParam)
 	param.appSecret = authParam.sdk_secret.c_str();
 	ZNSDKError err = Map2WrapDefine(ZOOM_SDK_NAMESPACE::CSDKWrap::GetInst().GetAuthServiceWrap().SDKAuth(param));
 	return err;
+}
+ZNSDKError ZAuthServiceWrap::AuthSDK(ZNAuthContext& authContext)
+{
+	ZOOM_SDK_NAMESPACE::AuthContext context;
+	if (!authContext.sdk_jwt_token.empty())
+	{
+		context.jwt_token = authContext.sdk_jwt_token.c_str();
+		return Map2WrapDefine(ZOOM_SDK_NAMESPACE::CSDKWrap::GetInst().GetAuthServiceWrap().SDKAuth(context));
+	}
+	return ZNSDKERR_INVALID_PARAMETER;
 }
 void ZAuthServiceWrap::SetSink(ZNativeSDKAuthWrapSink* pSink)
 {
@@ -137,6 +147,13 @@ void ZAuthServiceWrap::onZoomIdentityExpired()
 	if (m_pSink)
 	{
 		m_pSink->onZoomIdentityExpired();
+	}
+}
+void ZAuthServiceWrap::onZoomAuthIdentityExpired()
+{
+	if (m_pSink)
+	{
+		m_pSink->onZoomAuthIdentityExpired();
 	}
 }
 ZNAuthResult ZAuthServiceWrap::GetAuthResult()

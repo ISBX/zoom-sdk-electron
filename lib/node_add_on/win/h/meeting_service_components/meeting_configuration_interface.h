@@ -227,10 +227,14 @@ public:
 	virtual void onEndOtherMeetingToJoinMeetingNotification(IEndOtherMeetingToJoinMeetingHandler* handler_) = 0;
 };
 
+/*! \struct tagRedirectWarningMsgOption
+    \brief Determine if the user handles the corresponding type of the warning message with user's own program.
+    Here are more detailed structural descriptions.
+*/
 typedef struct tagRedirectWarningMsgOption
 {
-	bool bRedirectBadNetwork;
-	bool bRedirectWarnHighCPU;
+	bool bRedirectBadNetwork;///<TRUE indicates the user will handle the warning message of bad network with its own program.
+	bool bRedirectWarnHighCPU;///<TRUE indicates the user will handle the warning message of high cpu with its own program.
 	tagRedirectWarningMsgOption()
 	{
 		bRedirectBadNetwork = false;
@@ -238,6 +242,35 @@ typedef struct tagRedirectWarningMsgOption
 	}
 
 }RedirectWarningMsgOption;
+
+
+/*! \struct tagPanelistMenuItemOption
+    \brief Define the strategy to show the menu items for panelist.
+    Here are more detailed structural descriptions.
+*/
+typedef struct tagPanelistMenuItemOption
+{
+	bool bNotShowDowngradePanelist;///<True indicates to hide 'Change role to attendee' menu item
+	tagPanelistMenuItemOption()
+	{
+		bNotShowDowngradePanelist = false;
+	}
+
+}PanelistMenuItemOption;
+
+/*! \struct tagAttendeeMenuItemOption
+    \brief Define the strategy to show the menu items for attendee.
+    Here are more detailed structural descriptions.
+*/
+typedef struct tagAttendeeMenuItemOption
+{
+	bool bNotShowPromoteToPanelist;///<True indicates to hide 'Promote to panelist'menu item
+	tagAttendeeMenuItemOption()
+	{
+		bNotShowPromoteToPanelist = false;
+	}
+
+}AttendeeMenuItemOption;
 
 /// \brief Meeting user configuration interface.
 ///
@@ -260,14 +293,6 @@ public:
 	/// \param bShow TRUE means to enable the feature to display always the toolbar at the bottom. Otherwise not. 
 	virtual void SetBottomFloatToolbarWndVisibility(bool bShow) = 0;
 
-	/// \brief Set the visibility of the meeting ID in the title-bar. Default value: FALSE.
-	/// \param bHide FALSE means to display the content. Otherwise not.
-	virtual void HideMeetingInfoFromMeetingUITitle(bool bHide) = 0;
-
-	/// \brief Set the meeting ID in the title-bar of the meeting window. 
-	/// \param meetingNumber Specify the meeting ID in the title-bar of the meeting window.
-	virtual void SetMeetingIDForMeetingUITitle(UINT64 meetingNumber) = 0;
-
 	/// \brief Set the visibility of the dialog box when receiving the request of remote control during the meeting. Default value: TRUE.
 	/// \param bEnable TRUE indicates to display the dialog box. FALSE not.
 	///If it is FALSE, the user can deal with this request in the IMeetingRemoteCtrlEvent::onRemoteControlStatus() callback event sent by SDK when receiving the request of the remote control and then enters the sharing status at the end of callback event.
@@ -281,7 +306,7 @@ public:
 	/// \brief Set the visibility of the LEAVE MEETING button on the pop-up dialogue box when the host leaves the meeting. Default value: TRUE.	/// \param bEnable TRUE indicates to display the button. Otherwise not.
 	virtual void EnableLeaveMeetingOptionForHost(bool bEnable) = 0;
 
-	/// \brief Set the visibility of the INVITE button in the toolbar during the meeting. Default value: TRUE.
+	/// \brief Set the visibility of the INVITE button in the panelist action bar during the meeting. Default value: TRUE.
 	/// \param bEnable TRUE indicates to display the button. Otherwise not.
 	/// \remarks The user will receive the IMeetingUIControllerEvent::onInviteBtnClicked() callback event when he clicks the INVITE button. If the callback event is not handled, the SDK will pop up a ZOOM custom invitation dialog.
 	///The user will receive the IMeetingUIControllerEvent::onZoomInviteDialogFailed() callback event if the dialog box is failed to display.
@@ -290,6 +315,10 @@ public:
 	/// \brief Set the visibility of the Video button in the toolbar during the meeting. Default value: TRUE.
 	/// \param bEnable TRUE indicates to display the button. Otherwise not.
 	virtual void EnableVideoButtonOnMeetingUI(bool bEnable) = 0;
+
+	/// \brief Set the visibility of the Audio button in the toolbar during the meeting. Default value: TRUE.
+	/// \param bEnable TRUE indicates to display the button. Otherwise not.
+	virtual void EnableAudioButtonOnMeetingUI(bool bEnable) = 0;
 
 	/// \brief Set the visibility of the buttons to enter or exit the full screen in the meeting window. Default value: TRUE.
 	/// \param bEnable TRUE indicates to display the button. Otherwise not.
@@ -380,11 +409,6 @@ public:
 	/// \brief Set the visibility of CALL ME tab in the audio dialog box when joining the meeting. Default value: TRUE.
 	/// \param bShow TRUE indicates to display the tab. FALSE not.
 	virtual void SetShowCallMeTab(bool bShow) = 0;
-
-	/// \brief Set if it is able to display always the meeting ID on the title bar of the window during the meeting. Default: False.
-	/// \param bAlwaysShow TRUE indicates to display always the meeting ID. FALSE not.
-	/// \remarks If it is FALSE, the program will execute ZOOM's default logic.
-	virtual void SetAlwaysShowMeetingIDOnTitle(bool bAlwaysShow) = 0;
 	
 	///	\deprecated This function will be deprecated, please use ICustomizedResourceHelper.AddCustomizedStringResouce() instead.
 	/// \brief Use the custom string to replace the specified menu item.
@@ -475,6 +499,46 @@ public:
 	/// \brief Set the visibility of poll on meeting UI. Default is displaying.
 	/// \param [in] bHide TRUE means hiding, otherwise not.
 	virtual void HidePollOnMeetingUI(bool bHide) = 0;
+
+	/// \brief Set the ability to control the audio device in the meeting. Default is having the ability.
+	/// \param [in] bDisable TRUE means having no ability, otherwise not.
+	/// \This API is not recommended to call because once the bDsialbe is true, Zoom meeting may lose the control of the audio devices.
+	virtual void DisableAdvanceAudioDeivceCtrl(bool bDisable) = 0;
+
+	/// \brief Set if it is able to handle the event with SDK user's own program by clicking Audio button in the meeting. Default value: FALSE.
+	/// \param bRedirect TRUE indicates to handle with user's own program. FALSE not.
+	/// \remarks If the user calls this function to convert, the SDK will trigger the IMeetingUIControllerEvent::onAudioBtnClicked(AudioBtnClickedCallbackInfo info), and the user shall deal with the subsequent logic himself.
+	virtual void RedirectClickAudioBTNEvent(bool bRedirect) = 0;
+
+	/// \brief Set if it is able to handle the event with SDK user's own program by clicking Audio Menu button in the meeting. Default value: FALSE.
+	/// \param bRedirect TRUE indicates to handle with user's own program. FALSE not.
+	/// \remarks If the user calls this function to convert, the SDK will trigger the IMeetingUIControllerEvent::onAudioMenuBtnClicked(), and the user shall deal with the subsequent logic himself.
+	virtual void RedirectClickAudioMenuBTNEvent(bool bRedirect) = 0;
+
+	/// \brief Set if it is able to handle the event with SDK user's own program by clicking Breakout Room button in the meeting. Default value: FALSE.
+	/// \param bRedirect TRUE indicates to handle with user's own program. FALSE not.
+	/// \remarks If the user calls this function to convert, the SDK will trigger the IMeetingUIControllerEvent::onBreakoutRoomBtnClicked(), and the user shall deal with the subsequent logic himself.
+	virtual void RedirectClickBreakoutRoomButtonEvent(bool bRedirect) = 0;
+
+	/// \brief Set the visibility of reaction on meeting UI. Default is displaying.
+	/// \param [in] bHide TRUE means hiding, otherwise not.
+	virtual void HideReactionsOnMeetingUI(bool bHide) = 0;
+
+	/// \brief Set the visibility of meeting info button on meeting UI. Default is displaying.
+	/// \param [in] bHide TRUE means hiding, otherwise not.
+	virtual void HideMeetingInfoOnMeetingUI(bool bHide) = 0;
+
+	/// \brief Set the visibility of share button on meeting UI. Default is displaying.
+	/// \param [in] bHide TRUE means hiding, otherwise not.
+	virtual void HideShareButtonOnMeetingUI(bool bHide) = 0;
+
+	/// \brief Custom the menu items show or hide for panelist.
+	/// \param menuOption True indicates to hide the corresponding menu item for each item.
+	virtual void DisablePanelistMenuItem(PanelistMenuItemOption menuOption) = 0;
+
+	/// \brief Custom the menu items show or hide for attendee.
+	/// \param menuOption True indicates to hide the corresponding menu item for each item.
+	virtual void DisableAttendeeMenuItem(AttendeeMenuItemOption menuOption) = 0;
 };
 
 /// \brief Meeting connect configuration Interface
@@ -529,6 +593,10 @@ public:
 	/// \brief Set the visibility of the dialog  SELECT JOIN AUDIO when joining meeting. Default: FALSE.
 	/// \param bDisable TRUE indicates to hide the dialog box.
 	virtual void DisableAutoShowSelectJoinAudioDlgWhenJoinMeeting(bool bDisable) = 0;
+
+	/// \brief Set the visibility of the dialog box of joining a meeting. Default: FALSE.
+	/// \param bDisable TRUE indicates to hide the dialog box. FALSE not.
+	virtual void DisableShowJoinMeetingWnd(bool bDisable) = 0;
 };
 
 /// \brief Meeting configuration interface.
@@ -578,6 +646,7 @@ public:
 	/// \brief Set if it is able to limit the length of meeting ID. Default: FALSE.
 	/// \param bEnable TRUE indicates to limit the length of meeting ID. FALSE not.
 	/// \remarks If it is enabled, the length of the meeting ID depends on the ID type. The ID shall be more than nine(9) figures or five(5) letters.
+	/// Also, The meeting ID will be displayed as it is (not formatted).
 	virtual void EnableLengthLimitationOfMeetingNumber(bool bEnable) = 0;
 
 	/// \brief Set if it is able to share IOS device. Default: FALSE.
@@ -595,6 +664,11 @@ public:
 	/// \brief Set the maximum duration of the meeting when there is no attendee in the meeting. Default: 24*60.
 	/// \param nDuration Specify the maximum duration in minutes.
 	virtual void SetMaxDurationForOnlyHostInMeeting(int nDuration) = 0;
+
+	/// \brief Set if it is able to leave the meeting when the screen is locked or the screen saver is shown. Default: TRUE.
+	/// \param bEnable TRUE indicates to enable to share on the white board. FALSE not.
+	/// \remarks No matter what value you set for API, the callback IMeetingServiceEvent::onOSSessionChangedNotification will be triggered.
+	virtual void EnableLeaveMeetingWhenScreenLocked(bool bEnable) = 0;
 };
 
 END_ZOOM_SDK_NAMESPACE

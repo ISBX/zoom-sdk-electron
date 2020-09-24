@@ -88,6 +88,37 @@ typedef struct tagSplitScreenInfo
 	}
 }SplitScreenInfo;
 
+/*! \enum AudioCallbackActionInfo
+    \brief The action user suggested to take after getting the callback event "IMeetingUIControllerEvent::onAudioBtnClicked()"
+    Here are more detailed structural descriptions.
+*/
+enum AudioCallbackActionInfo
+{
+	ACTION_NONE = 0,///<For initialization.
+	ACTION_CHOOSE_AUDIO_DEVICE_NOAUDIODEVICECONNECTTED,///<Choose audio device because no audio device is connected yet.
+	ACTION_CHOOSE_AUDIO_DEVICE_COMPUTERAUDIODEVICEERROR,///<Choose audio device because there is an error in the connected computer audio device.
+	ACTION_CHOOSE_AUDIO_DEVICE_PHONECALLDEVICEERROR,///<Choose audio device because there is an error in the connected phone call device.
+	ACTION_NEED_JOIN_VOIP,///<Need to join voip.
+	ACTION_MUTE_UNMUTE_AUDIO,///<Mute or unmute some user's audio according to the "AudioBtnClickedCallbackInfo::userid_MuteUnmute"
+	ACTION_SHOW_AUDIO_SETTING_WINDOW,///<Show audio setting window.
+};
+
+/*! \struct tagAudioBtnClickedCallbackInfo
+    \brief The suggested action information for user to handle after getting the callback event "IMeetingUIControllerEvent::onAudioBtnClicked()"
+    Here are more detailed structural descriptions.
+*/
+typedef struct tagAudioBtnClickedCallbackInfo
+{
+	unsigned int userid_MuteUnmute;///<The id of the user that should be muted or unmuted. When no mute or unmute operation is required, the value is 0
+	AudioCallbackActionInfo audio_clicked_action;///<The suggested action for user to take.
+	tagAudioBtnClickedCallbackInfo()
+	{
+		userid_MuteUnmute = 0;
+		audio_clicked_action = ACTION_NONE;
+	}
+
+}AudioBtnClickedCallbackInfo;
+
 /// \brief Callback Event of Meeting UI Controller.
 ///
 class IMeetingUIControllerEvent
@@ -120,6 +151,19 @@ public:
 	/// \brief Callback event of clicking CC menu.
 	/// \remarks The user won't receive this callback event unless he redirects the process of clicking the CUSTOME LIVE STREAM menu. For more details, see \link IMeetingUIElemConfiguration::RedirectClickCCBTNEvent() \endlink.
 	virtual void onCCBTNClicked() = 0;
+
+	/// \brief Callback event for clicking Audio button in the meeting.
+	/// \remarks The user won't receive this callback event unless he sets to redirect the process of clicking the Audio button in the meeting. For more details, see \link IMeetingUIElemConfiguration::RedirectClickAudioBTNEvent() \endlink.
+	virtual void onAudioBtnClicked(AudioBtnClickedCallbackInfo info) = 0;
+	
+	/// \brief Callback event for clicking Audio Menu button in the meeting.
+	/// \remarks The user won't receive this callback event unless he sets to redirect the process of clicking the Audio Menu button in the meeting. For more details, see \link IMeetingUIElemConfiguration::RedirectClickAudioMenuBTNEvent() \endlink.
+	virtual void onAudioMenuBtnClicked() = 0;
+
+	/// \brief Callback event for clicking Breakout Room button in the meeting.
+	/// \remarks The user won't receive this callback event unless he sets to redirect the process of clicking the Breakout Room button in the meeting. For more details, see \link IMeetingUIElemConfiguration::RedirectClickBreakoutRoomButtonEvent() \endlink.
+	virtual void onBreakoutRoomBtnClicked() = 0;
+	
 };
 
 /// \brief Meeting UI Controller Interface.
@@ -291,6 +335,12 @@ public:
 	/// \return SDKErr_Success means success, otherwise not
 	///Otherwise failed. To get extended error information, see \link SDKError \endlink enum.
 	virtual SDKError CanSwapToShowShareViewOrVideo(bool& bCan) = 0;
+
+	/// \brief Set the meeting topic in the meeting information page. 
+	/// \param meetingtopic Specify the meeting topic in the meeting information page.
+	/// \return SDKErr_Success means success, otherwise not
+	///Otherwise failed. To get extended error information, see \link SDKError \endlink enum.
+	virtual SDKError SetMeetingTopic(const wchar_t* meetingtopic) = 0;
 };
 
 END_ZOOM_SDK_NAMESPACE

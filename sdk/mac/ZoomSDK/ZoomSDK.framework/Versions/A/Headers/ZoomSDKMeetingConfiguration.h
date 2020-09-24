@@ -32,9 +32,9 @@
     BOOL               _enableAutoAdjustSpeakerVolume;
     //Enable auto-adjust the microphone volume.
     BOOL                _enableAutoAdjustMicVolume;
-    //Hide the meeting information on main window.
+    //Hide the meeting information on main window. Do not support since version 4.6
     BOOL                _hideMainWindowMeetingInfo;
-    //The meeting ID customized by user and it is displayed on the title bar of meeting. 
+    //The meeting ID customized by user and it is displayed on the title bar of meeting. Do not support since version 4.6
     unsigned int        _newMeetingID;
     //Hide the prompt dialog of wrong password.
     BOOL                _disablePopupWrongPasswordWindow;
@@ -60,6 +60,8 @@
     BOOL                _disableToolbarInviteButtonClickOriginAction;
     //Input meeting information in advance when user joins webinar.
     BOOL                _needPrefillWebinarJoinInfo;
+    //Hide register webinar window when join webinar.
+    BOOL                _hideRegisterWebinarInfoWindow;
     //Hide the confirm dialog of user leaves/ends meeting.
     BOOL                _hideLeaveMeetingWindow;
     //Disable ZOOM original actions of clicking button participants.
@@ -72,7 +74,7 @@
     BOOL                _hideCallMeInAudioWindow;
     //Forbid multi-participants sharing at the same time.
     BOOL                _forceDisableMultiShare;
-    //Set whether to enable global shortcuts in configuration.
+    //Set whether to enable global shortcuts in configuration.not support since version 4.6.
     BOOL                _enableGlobalShortcuts;
 	//Disable custom live stream.
     BOOL                _disableCustomLiveStreamAction;
@@ -102,6 +104,21 @@
     BOOL                _hideChatItemInMeeting;
     //Hide remote control item on more menu.
     BOOL                _hideRemoteControlItemOnMoreMenu;
+    //Hide choose save recording file path window.
+    BOOL                _hideChooseSaveRecordingFilePathWindow;
+    //Disable ZOOM original actions of clicking Audio button.
+    BOOL                _disableAudioButtonClickOriginAction;
+    //Disable audio menu item original action in-meeting.
+    BOOL                _disableAudioSettingMenuButtonClickOriginAction;
+    //Hide loading window when start meeting without login.
+    BOOL                _hideLoadingWindow;
+    //Disable ZOOM original actions of clicking button Breakout Rooms.
+    BOOL                _disableBreakoutRoomsButtonClickOriginAction;
+    //Hide meeting info button on video UI.
+    BOOL                _hideMeetingInfoButtonOnVideo;
+    //hide invited button on participants window.
+    BOOL                _hideInvitButtonOnHCWindow;
+                 
 }
 @property(nonatomic, assign)CGDirectDisplayID displayAppID;
 @property(nonatomic, assign)CGDirectDisplayID monitorID;
@@ -127,6 +144,7 @@
 @property(nonatomic, assign)BOOL disableShareButtonClickOriginAction;
 @property(nonatomic, assign)BOOL disableToolbarInviteButtonClickOriginAction;
 @property(nonatomic, assign)BOOL needPrefillWebinarJoinInfo;
+@property(nonatomic, assign)BOOL hideRegisterWebinarInfoWindow;
 @property(nonatomic, assign)BOOL hideLeaveMeetingWindow;
 @property(nonatomic, assign)BOOL disableParticipantButtonClickOriginAction;
 @property(nonatomic, assign)BOOL hideFullPhoneNumber4PureCallinUser;
@@ -148,6 +166,13 @@
 @property(nonatomic, assign)BOOL hideCopyInvitationButtonWhenInviteOthers;
 @property(nonatomic, assign)BOOL hideChatItemInMeeting;
 @property(nonatomic, assign)BOOL hideRemoteControlItemOnMoreMenu;
+@property(nonatomic, assign)BOOL hideChooseSaveRecordingFilePathWindow;
+@property(nonatomic, assign)BOOL disableAudioButtonClickOriginAction;
+@property(nonatomic, assign)BOOL disableAudioSettingMenuButtonClickOriginAction;
+@property(nonatomic, assign)BOOL hideLoadingWindow;
+@property(nonatomic, assign)BOOL disableBreakoutRoomsButtonClickOriginAction;
+@property(nonatomic, assign)BOOL hideMeetingInfoButtonOnVideo;
+@property(nonatomic, assign)BOOL hideInvitButtonOnHCWindow;
 
 - (ZoomSDKError)prefillWebinarUserName:(NSString*)userName Email:(NSString*)email;
 - (ZoomSDKError)hideSDKButtons:(BOOL)hide ButtonType:(SDKButton)button;
@@ -158,7 +183,7 @@
  @param meetingnumber Custom meeting number. 
  @note If you want to show the default meeting number, set newMeetingNum = 0. Otherwise set other number to replace it.
  */
-- (ZoomSDKError)modifyWindowTitle:(BOOL)modify NewMeetingNum:(unsigned int)meetingnumber;
+- (ZoomSDKError)modifyWindowTitle:(BOOL)modify NewMeetingNum:(unsigned int)meetingnumber NS_DEPRECATED_MAC(1.0, 4.6);
 
 /**
  @brief Modify the DSCP of audio and video.
